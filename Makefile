@@ -3,7 +3,7 @@ CCFLAGS= -Wall -Werror -std=c++11 -g
 LIBFLAGS=
 SRC= $(wildcard *.cc)
 OBJ= $(SRC:.cc=.o)
-EXEC= main
+EXEC= main.out
 
 
 all: $(EXEC)

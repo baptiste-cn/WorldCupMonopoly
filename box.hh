@@ -9,24 +9,25 @@ class Box{
     static unsigned int cpt;
     protected:
         int _boxId;
-        std::string boxName;
+        std::string _boxName;
         int _boxNumber;
 
     public:
         //constructors
-        Box(){}; 
+        Box(); 
         ~Box(){};
         //pure virtual function
         virtual void addMoney(Player &player) = 0;
 
         //getters
         int getBoxNumber() const {return _boxNumber;}
-        std::string getBoxName() const {return boxName;}
+        std::string getBoxName() const {return _boxName;}
         int getBoxId() const {return _boxId;}    
         
         //setters
         void setBoxNumber(int boxNumber){_boxNumber = boxNumber;}
-        void setBoxName(std::string name){boxName = name;}
+        void setBoxName(std::string name){_boxName = name;}
+        
         
 };
 
@@ -64,7 +65,7 @@ class StadiumBox: public PropertyBox{
         StadiumBox(std::string name); //{setBoxName(name); _boxId = cpt++;}
 
         void addMoney(Player &player){player.addMoney(player.getMoney() + _rent);}
-
+        
         //getters
         //setters
         void setRent(int rent){_rent = rent;}
@@ -74,9 +75,21 @@ class StadiumBox: public PropertyBox{
 class FrenchStadiums: public StadiumBox{
     public:
         //constructors
-        FrenchStadiums(){};// { StadiumBox("Parc des Princes"); StadiumBox("Stade de France"); }
-        ~FrenchStadiums() {};
+        FrenchStadiums();
+        ~FrenchStadiums(){};
+
+        //getters
+        std::vector<StadiumBox> getFrenchStadiums() const {return _frenchStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_frenchStadiums;
 };
+
+//redfining operator << for StadiumBox
+inline std::ostream& operator<<(std::ostream& os, const StadiumBox& stadiumBox){
+    os << stadiumBox.getBoxName() << std::endl;
+    return os;
+}
 
 class SpanishStadiums: public StadiumBox{
     public:

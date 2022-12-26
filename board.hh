@@ -13,8 +13,8 @@ class Board{
         int _taxMoney;  //argent des taxes
 
     public:
-        Board();
-        ~Board();
+        Board(){};
+        ~Board(){};
         void throwDice(){
             int dice = rand() % 6 + 1;
             std::cout << "Dice: " << dice << std::endl;
