@@ -1,13 +1,22 @@
 #pragma once
 
+#include <vector>
 #include "game.hh"
-#include "box.hh"
+
+class Box;
 
 class Player: public Game{
     public:
         //constructor(s)
         Player();
         ~Player();
+
+        //setters
+        void addMoney(int amount){_money += amount;}
+
+        //getters
+        int getMoney() const {return _money;}
+
         
     protected:
         int _daysInJail;

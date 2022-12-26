@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "game.hh"
+#include "player.hh"
+#include "box.hh"
+
 
 int main(){
-    Game();
+    //Game();
+    FrenchStadiums();
     while(1){
         //game loop
     }
