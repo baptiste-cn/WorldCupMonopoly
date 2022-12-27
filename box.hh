@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include "board.hh"
 #include "player.hh"
 
 class Box{
@@ -72,6 +73,12 @@ class StadiumBox: public PropertyBox{
 
 };
 
+//redfining operator << for StadiumBox
+inline std::ostream& operator<<(std::ostream& os, const StadiumBox& stadiumBox){
+    os << stadiumBox.getBoxName() << std::endl;
+    return os;
+};
+
 class FrenchStadiums: public StadiumBox{
     public:
         //constructors
@@ -85,24 +92,95 @@ class FrenchStadiums: public StadiumBox{
         std::vector<StadiumBox>_frenchStadiums;
 };
 
-//redfining operator << for StadiumBox
-inline std::ostream& operator<<(std::ostream& os, const StadiumBox& stadiumBox){
-    os << stadiumBox.getBoxName() << std::endl;
-    return os;
-}
-
 class SpanishStadiums: public StadiumBox{
     public:
         //constructors
-        SpanishStadiums() {StadiumBox("Camp Nou"); StadiumBox("Santiago Bernabeu"); StadiumBox("Benito-Vallamarin");}
+        SpanishStadiums();
         ~SpanishStadiums() {};
+
+        //getters
+        std::vector<StadiumBox> getSpanishStadiums() const {return _spanishStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_spanishStadiums;
+};
+
+class BrazilianStadiums: public StadiumBox{
+    public:
+        //constructors
+        BrazilianStadiums();
+        ~BrazilianStadiums() {};
+
+        //getters
+        std::vector<StadiumBox> getBrazilianStadiums() const {return _brazilianStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_brazilianStadiums;
 };
 
 class EnglishStadiums: public StadiumBox{
     public:
         //constructors
-        EnglishStadiums() {StadiumBox("Wembley"); StadiumBox("Old Trafford"); StadiumBox("Anfield");}
+        EnglishStadiums();
         ~EnglishStadiums() {};
+
+        //getters
+        std::vector<StadiumBox> getEnglishStadiums() const {return _englishStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_englishStadiums;
+};
+
+class DeutchStadiums: public StadiumBox{
+    public:
+        //constructors
+        DeutchStadiums();
+        ~DeutchStadiums() {};
+
+        //getters
+        std::vector<StadiumBox> getDeutchStadiums() const {return _deutchStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_deutchStadiums;
+};
+
+class ArgentinianStadiums: public StadiumBox{
+    public:
+        //constructors
+        ArgentinianStadiums();
+        ~ArgentinianStadiums() {};
+
+        //getters
+        std::vector<StadiumBox> getArgentinianStadiums() const {return _argentinianStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_argentinianStadiums;
+};
+
+class RussianStadiums: public StadiumBox{
+    public:
+        //constructors
+        RussianStadiums();
+        ~RussianStadiums() {};
+
+        //getters
+        std::vector<StadiumBox> getRussianStadiums() const {return _russianStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_russianStadiums;
+};
+
+class SouthAfricanStadiums: public StadiumBox{
+    public:
+        //constructors
+        SouthAfricanStadiums();
+        ~SouthAfricanStadiums() {};
+
+        //getters
+        std::vector<StadiumBox> getSouthAfricanStadiums() const {return _southAfricanStadiums;}
+
+    protected:
+        std::vector<StadiumBox>_southAfricanStadiums;
 };
 
 
@@ -114,8 +192,25 @@ class VideoBox: public PropertyBox{
         int _rent;
 
     public:
-        //setters
-        void setRent(int rent){_rent = rent;}
+        //constructors
+        VideoBox(){}; //{_boxId = cpt++;};
+        VideoBox(std::string name); //{setBoxName(name); _boxId = cpt++;}
+        
+        void addMoney(Player &player){};        
+};
+
+class VideoBoxes: public VideoBox{
+    public:
+        //constructors
+        VideoBoxes(){}; //{_boxId = cpt++;};
+
+        void addMoney(Player &player){};  
+
+        //getters
+        std::vector<VideoBox> getVideoBoxes() const {return _videoBoxes;}
+
+    protected:
+        std::vector<VideoBox>_videoBoxes;      
 };
 
 class ElectrcityBox: public PropertyBox{
@@ -148,6 +243,8 @@ class StartBox: public HappeningBox{
         //constructors
         StartBox() {setBoxName("Start Box"); setBoxNumber(0);}
         ~StartBox() {};
+
+        void addMoney(Player &player){player.addMoney(player.getMoney() + 200);}
 };
 
 class FreePark: public HappeningBox{
@@ -155,6 +252,8 @@ class FreePark: public HappeningBox{
         //constructors
         FreePark() {setBoxName("Free Park"); setBoxNumber(10);}
         ~FreePark() {};
+
+        void addMoney(Player &player){player.addMoney(player.getMoney());}
 };
 
 class JailBox: public HappeningBox{
@@ -162,6 +261,8 @@ class JailBox: public HappeningBox{
         //constructors
         JailBox() {setBoxName("Jail Box"); setBoxNumber(11);}
         ~JailBox() {};
+
+        void addMoney(Player &player){}
 };
 
 class RedCardBox: public HappeningBox{
@@ -169,4 +270,6 @@ class RedCardBox: public HappeningBox{
         //constructors
         RedCardBox() {setBoxName("Red Card Box"); setBoxNumber(31);}
         ~RedCardBox() {};
+
+        void addMoney(Player &player){};
 };
