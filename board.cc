@@ -1,21 +1,27 @@
 #include "board.hh"
+#include "box.hh"
 
 //On démarre le jeu donc on initialise le plateau
 Board::Board(){
-    _nbPlayers = 0;
+    nbPlayers = 0;
     _whosPlaying = 0;
     _taxMoney = 0;
     
-    //On crée les cases du plateau
-    //cases spéciales
+    // On crée les cases du plateau
+    // cases spéciales uniques
     StartBox start;
+    JailBox jail;
+    VisitBox visitBox;
     FreePark freePark;
     RedCardBox redCardBox;
-    JailBox jail;
-
+    
+    // cases spéciales en plusieurs exemplaires
+    TaxBoxes taxBoxes;
     VideoBoxes videoBoxes;
-
-    //cases propriétés
+    LotteryBoxes lotteryBoxes;
+    RepairBoxes repairBoxes;
+    
+    // cases propriétés
     SouthAfricanStadiums SouthAfrStads;
     RussianStadiums RussianStads;
     ArgentinianStadiums ArgentinianStads;
@@ -25,18 +31,26 @@ Board::Board(){
     SpanishStadiums SpanishStads;
     FrenchStadiums FrenchStads;
 
-    //On ajoute les cases au plateau
-    //cases spéciales
+    // On ajoute les cases au plateau
+    // cases spéciales uniques
     _boxes.push_back(start);
+    _boxes.push_back(jail);
+    _boxes.push_back(visitBox);
     _boxes.push_back(freePark);
     _boxes.push_back(redCardBox);
-    _boxes.push_back(jail);
-
+    
+    // cases spéciales en plusieurs exemplaires
+    for(auto& box: taxBoxes.getTaxBoxes()){
+        _boxes.push_back(box);
+    }
     for(auto& box: videoBoxes.getVideoBoxes()){
         _boxes.push_back(box);
     }
+    for(auto& box: repairBoxes.getRepairBoxes()){
+        _boxes.push_back(box);
+    }
 
-    //cases propriétés
+    // cases propriétés
     for(auto& box: SouthAfrStads.getSouthAfricanStadiums()){
         _boxes.push_back(box);
     }
