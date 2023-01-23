@@ -21,3 +21,14 @@ Game::Game(){
 Game::~Game(){
     std::cout << "Thanks for playing!" << std::endl;
 }
+
+// while(1){
+    //     for(auto& player: board->getPlayers()){
+    //         std::cout << player.getName() << ", press enter to roll the dice." << std::endl;
+    //         std::cin.ignore();
+    //         board->throwDices(player);
+    //         std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << std::endl;
+    //         player.setActualPosition(player.getActualPosition() + board->dice1 + board->dice2);
+    //         std::cout << "You are now on " << board->getBoxesMap()[player.getActualPosition()].getBoxName() << std::endl;
+    //     }
+    // }
