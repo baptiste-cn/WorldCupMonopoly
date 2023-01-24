@@ -5,8 +5,9 @@
 #include <vector>
 #include <map>
 
-class Player;
 class Box;
+class Player;
+
 
 class Board{
     protected:
@@ -14,7 +15,7 @@ class Board{
         std::map<int, Box> _boxesMap;
         int _whosPlaying;  //à qui le tour
         int _taxMoney;  //argent des taxes
-        std::vector<Player*> _players;  //joueurs
+        std::vector<Player> _players;  //joueurs
         int _turn;
 
     public:
@@ -41,18 +42,16 @@ class Board{
         int getTaxMoney() const {return _taxMoney;}
         int getTurn() const {return _turn;}
         std::vector<Box*> getBoxes() const {return _boxes;}
-        std::vector<Player*>& getPlayers() {return _players;} //pas de const car on modifie le vecteur
+        std::vector<Player>& getPlayers() {return _players;} //pas de const car on modifie le vecteur
         std::map<int, Box> getBoxesMap() const {return _boxesMap;}
 
         //setters
         void setNbPlayers(int nbPlayers){nbPlayers = nbPlayers;}
         void setWhosPlaying(int whosPlaying){_whosPlaying = whosPlaying;}
         
-        
-
         //others
         void addTaxMoney(double amount) {_taxMoney+=amount;}
-        void addPlayer(Player &player){_players.push_back(&player);}
+        void addPlayer(Player &player){_players.push_back(player);}
 
 };
 

@@ -6,12 +6,33 @@
 #include "board.hh"
 #include "player.hh"
 
+enum BoxType {
+    FrenchStadium,
+    SpanishStadium,
+    BrazilianStadium,
+    EnglishStadium,
+    DeutchStadium,
+    ArgentinianStadium,
+    RussianStadium,
+    SouthAfricanStadium,
+    VideoBoxType,
+    RepairBoxType,
+    StartBoxType,
+    FreeParkBoxType,
+    JailBoxType,
+    RedCardBoxType,
+    LotteryBoxType,
+    TaxBoxType,
+    VisitBoxType
+};
+
 class Box{
     static unsigned int cpt;
     protected:
         int _boxId;
         std::string _boxName;
         int _boxNumber;
+        BoxType _boxType;
 
     public:
         //constructors
@@ -23,10 +44,12 @@ class Box{
         int getBoxNumber() const {return _boxNumber;}
         std::string getBoxName() const {return _boxName;}
         int getBoxId() const {return _boxId;}    
+        BoxType getBoxType(){return _boxType;}
         
         //setters
         void setBoxNumber(int boxNumber){_boxNumber = boxNumber;}
         void setBoxName(std::string name){_boxName = name;}
+        void setBoxType(BoxType type){_boxType = type;}
         
         
 };
@@ -85,9 +108,14 @@ class FrenchStadiums: public PropertyBox{
 
         //getters
         std::vector<Box> getFrenchStadiums() const {return _frenchStadiums;}
+        
+
+        //setters
+        
 
     protected:
         std::vector<Box>_frenchStadiums;
+        
 };
 
 class SpanishStadiums: public PropertyBox{
@@ -267,7 +295,7 @@ class HappeningBox: public Box{
 class StartBox: public HappeningBox{
     public:
         //constructors
-        StartBox() {setBoxName("Start Box"); setBoxNumber(0);}
+        StartBox() {setBoxName("Start Box"); setBoxNumber(0); setBoxType(StartBoxType);}
         ~StartBox() {};
 
         void interaction(Player &player){player.addMoney(player.getMoney() + 200);}
@@ -276,7 +304,7 @@ class StartBox: public HappeningBox{
 class FreePark: public HappeningBox{
     public:
         //constructors
-        FreePark() {setBoxName("Free Park"); setBoxNumber(20);}
+        FreePark() {setBoxName("Free Park"); setBoxNumber(20); setBoxType(FreeParkBoxType);}
         ~FreePark() {};
 
         void interaction(Player &player){player.addMoney(player.getMoney() );}
@@ -285,7 +313,7 @@ class FreePark: public HappeningBox{
 class JailBox: public HappeningBox{
     public:
         //constructors
-        JailBox() {setBoxName("Jail Box"); setBoxNumber(99);}
+        JailBox() {setBoxName("Jail Box"); setBoxNumber(99); setBoxType(JailBoxType);}
         ~JailBox() {};
 
         void interaction(Player &player){}
@@ -294,7 +322,7 @@ class JailBox: public HappeningBox{
 class RedCardBox: public HappeningBox{
     public:
         //constructors
-        RedCardBox() {setBoxName("Red Card Box"); setBoxNumber(30);}
+        RedCardBox() {setBoxName("Red Card Box"); setBoxNumber(30); setBoxType(RedCardBoxType);}
         ~RedCardBox() {};
 
         void interaction(Player &player){};
@@ -352,7 +380,7 @@ class TaxBoxes: public TaxBox{
 class VisitBox: public Box{
     public:
         //constructors
-        VisitBox(){setBoxName("Visit Box"); setBoxNumber(10);}
+        VisitBox(){setBoxName("Visit Box"); setBoxNumber(10); setBoxType(VisitBoxType);}
         ~VisitBox(){}
 
         void interaction(Player &player){}

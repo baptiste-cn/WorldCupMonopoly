@@ -37,5 +37,4 @@ Board::Board(){
     for(auto &box: _boxes){
         _boxesMap[box->getBoxNumber()] = *box;
     }
-    
 }
