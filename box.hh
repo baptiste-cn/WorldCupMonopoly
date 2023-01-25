@@ -43,7 +43,7 @@ class Box{
         std::string getBoxName() const {return _boxName;}
         int getBoxId() const {return _boxId;}    
         int getBoxType() const {return _boxType;}
-        double getPrice() const {return _price;}
+        double getPrice() {return _price;}  //pas de const : on va modifier le prix des cases
         double getMortgagePrice() const {return _mortgagePrice;}
         bool getIsBought() const {return _isBought;}
         int getRent() const {return _rent;}

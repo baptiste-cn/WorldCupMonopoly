@@ -10,14 +10,13 @@ class Player: public Board{
     public:
         //constructor(s)
         Player(){_name = "Player";};
-        Player(std::string name){_name = name; setActualPosition(0);}
+        Player(std::string name){_name = name; setActualPosition(0); setMoney(150000000);}
         ~Player(){};
 
         //setters
         void addMoney(int amount){_money = amount;}
         void setMoney(int amount){_money = amount;}
         void setActualPosition(int position){_actualPosition = position;}
-
 
         //getters
         int getMoney() const {return _money;}

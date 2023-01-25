@@ -4,11 +4,319 @@
 #include "board.hh"
 #include "player.hh"
 #include "box.hh"
-// #include "interaction.hh"
+
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+
+Board *board = new Board();  
+int quit = 0;
+SDL_Event event;
+SDL_Event event2;
+int mx, my;
+char sendBuffer[256];
+SDL_Surface *monopolyboard;
+SDL_Texture *texture_monopolyboard;
+SDL_Surface *p1;
+SDL_Texture *texture_p1;
+SDL_Surface *p2;
+SDL_Texture *texture_p2;
+SDL_Surface *p3;
+SDL_Texture *texture_p3;
+SDL_Surface *p4;
+SDL_Texture *texture_p4;
+SDL_Surface *passerlamain;
+SDL_Texture *texture_passerlamain;
+SDL_Surface *acheterpropriete;
+SDL_Texture *texture_acheterpropriete;
+SDL_Surface *acheterstands;
+SDL_Texture *texture_acheterstands;
+TTF_Font *Sans;
+char word[40];
+int cptWord;
+SDL_Window *window;
+SDL_Renderer *renderer;
+SDL_Rect PosP1 = {960, 30, 64, 64};
+SDL_Rect PosP2 = {250, 300, 64, 64};
+SDL_Rect PosP3 = {960, 30, 64, 64};
+SDL_Rect PosP4 = {250, 300, 64, 64};
+int affichage_interactions = 0; // 0 = lancer les dés | 1=passeer la main | 2=acheterlapropriété et passer la main | 3 = upgrade et passer la main
+
+void init_sdl()
+{
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
+
+    window = SDL_CreateWindow("SDL2 LINQ", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1600, 1000, 0);
+
+    renderer = SDL_CreateRenderer(window, -1, 0);
+    monopolyboard = IMG_Load("boardmonopoly.png");
+    texture_monopolyboard = SDL_CreateTextureFromSurface(renderer, monopolyboard);
+    p1 = IMG_Load("p1.png");
+    texture_p1 = SDL_CreateTextureFromSurface(renderer, p1);
+    p2 = IMG_Load("p2.png");
+    texture_p2 = SDL_CreateTextureFromSurface(renderer, p2);
+    p3 = IMG_Load("p3.png");
+    texture_p3 = SDL_CreateTextureFromSurface(renderer, p3);
+    p4 = IMG_Load("p4.png");
+    texture_p4 = SDL_CreateTextureFromSurface(renderer, p4);
+    passerlamain = IMG_Load("passerlamain.png");
+    texture_passerlamain = SDL_CreateTextureFromSurface(renderer, passerlamain);
+    acheterpropriete = IMG_Load("acheterpropriete.png");
+    texture_acheterpropriete = SDL_CreateTextureFromSurface(renderer, acheterpropriete);
+    acheterstands = IMG_Load("acheterstands.png");
+    texture_acheterstands = SDL_CreateTextureFromSurface(renderer, acheterstands);
+    Sans = TTF_OpenFont("sans.ttf", 30);
+}
+
+void myRenderText(const char *m, int x, int y)
+{
+    SDL_Color col1 = {221, 184, 26};
+    SDL_Surface *surfaceMessage =
+        TTF_RenderText_Solid(Sans, m, col1);
+    SDL_Texture *Message =
+        SDL_CreateTextureFromSurface(renderer,
+                                     surfaceMessage);
+
+    SDL_Rect Message_rect;
+    Message_rect.x = x;
+    Message_rect.y = y;
+    Message_rect.w = surfaceMessage->w;
+    Message_rect.h = surfaceMessage->h;
+
+    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+    SDL_DestroyTexture(Message);
+    SDL_FreeSurface(surfaceMessage);
+}
+
+void manageRedraw()
+{
+    int cntplayer = 0;
+    for (auto it = board->getPlayers().begin(); it != board->getPlayers().end(); ++it) // Met à jour la position des joueurs
+    {
+        cntplayer++;
+        int pos = (it)->getActualPosition();
+        int x = 0;
+        int y = 0;
+        switch (pos)
+        {
+        case 0:
+            x = 50;
+            y = 880;
+            break;
+        case 1:
+            x = 50;
+            y = 780;
+            break;
+        case 2:
+            x = 50;
+            y = 700;
+            break;
+        case 3:
+            x = 50;
+            y = 625;
+            break;
+        case 4:
+            x = 50;
+            y = 550;
+            break;
+        case 5:
+            x = 50;
+            y = 470;
+            break;
+        case 6:
+            x = 50;
+            y = 390;
+            break;
+        case 7:
+            x = 50;
+            y = 310;
+            break;
+        case 8:
+            x = 50;
+            y = 235;
+            break;
+        case 9:
+            x = 50;
+            y = 160;
+            break;
+        case 10: // Case prison visite
+            x = 20;
+            y = 20;
+            break;
+        case 11:
+            x = 160;
+            y = 50;
+            break;
+        case 12:
+            x = 235;
+            y = 50;
+            break;
+        case 13:
+            x = 315;
+            y = 50;
+            break;
+        case 14:
+            x = 390;
+            y = 50;
+            break;
+        case 15:
+            x = 470;
+            y = 50;
+            break;
+        case 16:
+            x = 545;
+            y = 50;
+            break;
+        case 17:
+            x = 625;
+            y = 50;
+            break;
+        case 18:
+            x = 704;
+            y = 50;
+            break;
+        case 19:
+            x = 779;
+            y = 50;
+            break;
+        case 20: // Terrain Libre
+            x = 885;
+            y = 50;
+            break;
+        case 21:
+            x = 885;
+            y = 159;
+            break;
+        case 22:
+            x = 885;
+            y = 235;
+            break;
+        case 23:
+            x = 885;
+            y = 313;
+            break;
+        case 24:
+            x = 885;
+            y = 390;
+            break;
+        case 25:
+            x = 885;
+            y = 469;
+            break;
+        case 26:
+            x = 885;
+            y = 546;
+            break;
+        case 27:
+            x = 885;
+            y = 625;
+            break;
+        case 28:
+            x = 885;
+            y = 703;
+            break;
+        case 29:
+            x = 885;
+            y = 778;
+            break;
+        case 30: // Carton jaune
+            x = 885;
+            y = 880;
+            break;
+        case 31:
+            x = 779;
+            y = 880;
+            break;
+        case 32:
+            x = 704;
+            y = 880;
+            break;
+        case 33:
+            x = 625;
+            y = 880;
+            break;
+        case 34:
+            x = 547;
+            y = 880;
+            break;
+        case 35:
+            x = 470;
+            y = 880;
+            break;
+        case 36:
+            x = 392;
+            y = 880;
+            break;
+        case 37:
+            x = 314;
+            y = 880;
+            break;
+        case 38:
+            x = 236;
+            y = 880;
+            break;
+        case 39:
+            x = 159;
+            y = 880;
+            break;
+        }
+        switch (cntplayer)
+        {
+        case 1:
+            PosP1 = {x, y, 64, 64};
+            break;
+        case 2:
+            PosP2 = {x, y, 64, 64};
+            break;
+        case 3:
+            PosP3 = {x, y, 64, 64};
+            break;
+        case 4:
+            PosP4 = {x, y, 64, 64};
+            break;
+        }
+    }
+    // Affiche les textures
+    SDL_RenderCopy(renderer, texture_monopolyboard, NULL, NULL);
+    SDL_RenderCopy(renderer, texture_p1, NULL, &PosP1);
+    SDL_RenderCopy(renderer, texture_p2, NULL, &PosP2);
+    if (board->nbPlayers > 2)
+    {
+        SDL_RenderCopy(renderer, texture_p3, NULL, &PosP3);
+        if (board->nbPlayers > 3)
+        {
+            SDL_RenderCopy(renderer, texture_p4, NULL, &PosP4);
+        }
+    }
+    // ==================================TO REMOVE==================================
+    board->getPlayers()[0].addMoney(230);
+    board->getPlayers()[1].addMoney(560);
+    // ==============================================================================
+    // Affichage des interactions:
+    if (affichage_interactions == 1)
+        SDL_RenderCopy(renderer, texture_passerlamain, NULL, NULL);
+    if (affichage_interactions == 2)
+        SDL_RenderCopy(renderer, texture_acheterpropriete, NULL, NULL);
+    if (affichage_interactions == 3)
+        SDL_RenderCopy(renderer, texture_acheterstands, NULL, NULL);
+    // Affiche les textes
+    myRenderText(std::to_string(board->getPlayers()[board->getWhosPlaying()].getMoney()).c_str(), 1198, 163);
+    myRenderText(board->getPlayers()[board->getWhosPlaying()].getName().c_str(), 1291, 227);
+    myRenderText("3", 1008, 325);
+    // Show what was drawn
+    SDL_RenderPresent(renderer);
+}
 
 int main(){
-    Board *board = new Board();  
-
     //boucle pour rentrer les joueurs et le nombre total de joueurs
     std::cout << "Welcome to Monopoly!" << std::endl;
     std::cout << "How many players are there? (2-4)" << std::endl;

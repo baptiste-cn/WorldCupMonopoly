@@ -1,6 +1,7 @@
 CC=g++
 CCFLAGS= -Wall -Werror -std=c++11 -g
-LIBFLAGS=
+LIBFLAGS= -I/usr/include/SDL2
+LIBFLAGS2= -lSDL2_image -lSDL2_ttf -lSDL2
 SRC= $(wildcard *.cc)
 OBJ= $(SRC:.cc=.o)
 EXEC= monopoly
@@ -9,10 +10,10 @@ EXEC= monopoly
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) $(LIBFLAGS) $^ -o $@  
+	$(CC) $(LIBFLAGS) $^ -o $@ $(LIBFLAGS2)
 
 %.o: %.cc
-	$(CC) $(CCFLAGS) -o $@ -c $<
+	$(CC) $(CCFLAGS) -o $@ $(LIBFLAGS) -c $< $(LIBFLAGS2)
 
 .depend:
 	g++ $(CCFLAGS) -MM $(SRC) > .depends
