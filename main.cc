@@ -4,6 +4,7 @@
 #include "board.hh"
 #include "player.hh"
 #include "box.hh"
+#include "interaction.hh"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -17,7 +18,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-Board *board = new Board();  
+Board *board = new Board();
 int quit = 0;
 SDL_Event event;
 SDL_Event event2;
@@ -297,10 +298,6 @@ void manageRedraw()
             SDL_RenderCopy(renderer, texture_p4, NULL, &PosP4);
         }
     }
-    // ==================================TO REMOVE==================================
-    board->getPlayers()[0].addMoney(230);
-    board->getPlayers()[1].addMoney(560);
-    // ==============================================================================
     // Affichage des interactions:
     if (affichage_interactions == 1)
         SDL_RenderCopy(renderer, texture_passerlamain, NULL, NULL);
@@ -316,34 +313,40 @@ void manageRedraw()
     SDL_RenderPresent(renderer);
 }
 
-int main(){
-    //boucle pour rentrer les joueurs et le nombre total de joueurs
+int main()
+{
+
+    // boucle pour rentrer les joueurs et le nombre total de joueurs
     std::cout << "Welcome to Monopoly!" << std::endl;
     std::cout << "How many players are there? (2-4)" << std::endl;
     std::cin >> board->nbPlayers;
 
-    while(board->nbPlayers<2){
+    while (board->nbPlayers < 2)
+    {
         std::cout << "There must be at least 2 players." << std::endl;
         std::cout << "How many players are there? (2-4)" << std::endl;
         std::cin >> board->nbPlayers;
     }
-    while(board->nbPlayers>4){
-        std::cout << "There must be at most 4 players." << std::endl;
+    while (board->nbPlayers > 4)
+    {
+        std::cout << "There must be at least 2 players." << std::endl;
         std::cout << "How many players are there? (2-4)" << std::endl;
         std::cin >> board->nbPlayers;
     }
 
     std::cout << "Enter the name of each player:" << std::endl;
-    for(int i = 0; i < board->nbPlayers; i++){
+    for (int i = 0; i < board->nbPlayers; i++)
+    {
         std::string name;
         std::cin >> name;
-        Player* player = new Player(name);
+        Player *player = new Player(name);
         board->addPlayer(*player);
     }
 
     std::cout << "The game will start with " << board->nbPlayers << " players." << std::endl;
     std::cout << "Their names are: " << std::endl;
-    for(auto& player: board->getPlayers()){
+    for (auto &player : board->getPlayers())
+    {
         std::cout << player.getName() << std::endl;
     }
 
@@ -355,7 +358,8 @@ int main(){
 
     std::cin.ignore();
     int dices[board->nbPlayers];
-    for(int index = 0; index < board->nbPlayers; index++){
+    for (int index = 0; index < board->nbPlayers; index++)
+    {
         std::cout << board->getPlayers()[index].getName() << ", press enter to roll the dice." << std::endl;
         std::cin.ignore();
         board->throwDices(board->getPlayers()[index]);
@@ -363,38 +367,95 @@ int main(){
         dices[index] = board->dice1 + board->dice2;
     }
 
-    //création d'un multimap pour stocker les joueurs et leur score
+    // création d'un multimap pour stocker les joueurs et leur score
     std::multimap<int, std::string> playersAndScores;
-    for(int i = 0; i < board->nbPlayers; i++){
+    for (int i = 0; i < board->nbPlayers; i++)
+    {
         playersAndScores.insert(std::pair<int, std::string>(dices[i], board->getPlayers()[i].getName()));
     }
 
-    //affichage des joueurs et de leur score dans l'ordre décroissant
+    // affichage des joueurs et de leur score dans l'ordre décroissant
     std::cout << "The order of play is: " << std::endl;
-    for(auto it = playersAndScores.rbegin(); it != playersAndScores.rend(); ++it){
+    for (auto it = playersAndScores.rbegin(); it != playersAndScores.rend(); ++it)
+    {
         std::cout << it->second << " with a roll of " << it->first << std::endl;
     }
 
-    //boucle pour jouer
-    while(1){
-        for(auto it = playersAndScores.rbegin(); it != playersAndScores.rend(); ++it){
-            for(int i = 0; i < board->nbPlayers; i++){
-                if(it->second == board->getPlayers()[i].getName()){
-                    std::cout << "It's " << board->getPlayers()[i].getName() << "'s turn." << std::endl;
-                    std::cout << "You are on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
-                    std::cout << "Press enter to roll the dice." << std::endl;
-                    std::cin.ignore();
-                    board->throwDices(board->getPlayers()[i]);
-                    std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << "." << std::endl;
-                    board->getPlayers()[i].setActualPosition((board->getPlayers()[i].getActualPosition() + board->dice1 + board->dice2) % 40);  //modulo 40 afin de reset la position du joueur s'il passe un tour de plateau
-                    std::cout << "You are now on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
-                    std::cout << "Press enter to continue." << std::endl;
-                    board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].interaction(board->getPlayers()[i]);
+    ////////////////////////////////////////////////////////////////////
+
+    // création d'un vecteur d'itérateurs pour stocker les joueurs
+    std::vector<std::vector<Player>::iterator> players_iterators;
+    for (auto it = board->getPlayers().begin(); it != board->getPlayers().end(); ++it)
+    {
+        players_iterators.push_back(it);
+    }
+    // Initialisation de l'image
+    init_sdl();
+
+    // ==================================TO REMOVE==================================
+    board->getPlayers()[0].addMoney(2300);
+    board->getPlayers()[1].addMoney(5600);
+    // ==============================================================================
+    while (!quit)
+    {
+        manageRedraw();
+        while (!SDL_PollEvent(&event))
+        {
+        }
+        switch (event.type)
+        {
+        case SDL_QUIT:
+            quit = 1;
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            SDL_GetMouseState(&mx, &my);
+            if (affichage_interactions == 0)
+            {
+                if ((mx > 1036 && mx < 1600) && (my < 150)) // Bouton lancer les dés
+                {
+                    board->throwDices(board->getPlayers()[board->getWhosPlaying()]);
+                    std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << std::endl;
+                    (board->getPlayers()[board->getWhosPlaying()]).setActualPosition(((board->getPlayers()[board->getWhosPlaying()]).getActualPosition() + board->dice1 + board->dice2) % 40); // modulo 40 afin de reset la position du joueur s'il passe un tour de plateau
+                    std::cout << "You are now on " << board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxName() << std::endl;
+                    std::cout << board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxNumber() << std::endl;
+                    affichage_interactions = board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].interaction(board->getPlayers()[board->getWhosPlaying()]);
                     std::cout << "-------------------------------------------" << std::endl;
-                    std::cin.ignore();
+                    // if(board->getPlayers()[board->getWhosPlaying()].canBuy()==1)affichage_interactions = 2;
+                    // else if(board->getPlayers()[board->getWhosPlaying()].canUpgrade()==1)affichage_interactions = 3;
+                    // else affichage_interactions = 1;
+                    //affichage_interactions = 2; //A commenter
+                    manageRedraw();
                 }
             }
+            else
+            {
+                if ((mx > 1037 && mx < 1270) && (my < 150)) // Bouton Acheter Propriete/upgrader
+                {
+                    if(affichage_interactions == 2){
+                        board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].acheter(board->getPlayers()[board->getWhosPlaying()]);
+                    }
+                    else if(affichage_interactions == 3){
+                        board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].upgrader(board->getPlayers()[board->getWhosPlaying()]);
+                    }
+                    // Ajouter un delay pour confirmer achat et affichage
+                    // passermain(); //Fonction à créer qui passe la main au joueur suivant
+                    board->setWhosPlaying((board->getWhosPlaying() + 1) % board->getPlayers().size());
+                    std::cout << "Acheter/Upgrader" << std::endl;
+                    affichage_interactions = 0;
+                }
+                if ((mx > 1329 && mx < 1600) && (my < 150)) // Bouton lancer les dés
+                {
+                    // passermain(); //Fonction à créer qui passe la main au joueur suivant
+                    board->setWhosPlaying((board->getWhosPlaying() + 1) % board->getPlayers().size());
+                    std::cout << "Passer la main" << std::endl;
+                    affichage_interactions = 0;
+                }
+            }
+            break;
         }
     }
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     return 0;
 }
