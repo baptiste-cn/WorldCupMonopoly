@@ -6,10 +6,6 @@ Box::Box(){
     _boxId = cpt++;
 }
 
-// StadiumBox::StadiumBox(std::string name){
-//     setBoxName(name);
-// }
-
 VideoBox::VideoBox(std::string name){
     setBoxName(name);
 }
@@ -26,196 +22,177 @@ RepairBox::RepairBox(std::string name){
     setBoxName(name);
 }
 
-SouthAfricanStadiums::SouthAfricanStadiums(std::vector<Box*> &boxes){
+SouthAfricanStadiums::SouthAfricanStadiums(){
     _southAfricanStadiums.push_back(Box("FNB Stadium"));
     _southAfricanStadiums.push_back(Box("Cape Town Stadium"));
     
     _southAfricanStadiums[0].setBoxNumber(1);
-    _southAfricanStadiums[0].setBoxType(SouthAfricanStadium);
+    _southAfricanStadiums[0].setBoxType(PropertyBox);
+    _southAfricanStadiums[0].setIsBought(false);
 
     _southAfricanStadiums[1].setBoxNumber(3);
-    _southAfricanStadiums[1].setBoxType(SouthAfricanStadium);
-
-    for (auto &box : _southAfricanStadiums){
-        boxes.push_back(&box);
-    }
+    _southAfricanStadiums[1].setBoxType(PropertyBox);
+    _southAfricanStadiums[1].setIsBought(false);
 }
 
-RussianStadiums::RussianStadiums(std::vector<Box*> &boxes){
+RussianStadiums::RussianStadiums(){
     _russianStadiums.push_back(Box("Luzhniki Stadium"));
     _russianStadiums.push_back(Box("Krestovsky Stadium"));
     _russianStadiums.push_back(Box("Otkrytiye Arena"));
 
     _russianStadiums[0].setBoxNumber(6);
-    _russianStadiums[0].setBoxType(RussianStadium);
+    _russianStadiums[0].setBoxType(PropertyBox);
+    _russianStadiums[0].setIsBought(false);
 
     _russianStadiums[1].setBoxNumber(8);
-    _russianStadiums[1].setBoxType(RussianStadium);
+    _russianStadiums[1].setBoxType(PropertyBox);
+    _russianStadiums[1].setIsBought(false);
 
     _russianStadiums[2].setBoxNumber(9);
-    _russianStadiums[2].setBoxType(RussianStadium);
-
-    for (auto &box : _russianStadiums){
-        boxes.push_back(&box);
-    }
+    _russianStadiums[2].setBoxType(PropertyBox);
+    _russianStadiums[2].setIsBought(false);
 }
 
-ArgentinianStadiums::ArgentinianStadiums(std::vector<Box*> &boxes){
+ArgentinianStadiums::ArgentinianStadiums(){
     _argentinianStadiums.push_back(Box("Estadio Monumental"));
     _argentinianStadiums.push_back(Box("Estadio La Bombonera"));
     _argentinianStadiums.push_back(Box("Estadio Ciudad de La Plata"));
 
     _argentinianStadiums[0].setBoxNumber(11);
-    _argentinianStadiums[0].setBoxType(ArgentinianStadium);
+    _argentinianStadiums[0].setBoxType(PropertyBox);
+    _argentinianStadiums[0].setIsBought(false);
 
     _argentinianStadiums[1].setBoxNumber(13);
-    _argentinianStadiums[1].setBoxType(ArgentinianStadium);
+    _argentinianStadiums[1].setBoxType(PropertyBox);
+    _argentinianStadiums[1].setIsBought(false);
 
     _argentinianStadiums[2].setBoxNumber(14);
-    _argentinianStadiums[3].setBoxType(ArgentinianStadium);
-
-    for (auto &box : _argentinianStadiums){
-        boxes.push_back(&box);
-    }
+    _argentinianStadiums[2].setBoxType(PropertyBox);
+    _argentinianStadiums[2].setIsBought(false);
 }
 
-DeutchStadiums::DeutchStadiums(std::vector<Box*> &boxes){
+DeutchStadiums::DeutchStadiums(){
     _deutchStadiums.push_back(Box("Allianz Arena"));
     _deutchStadiums.push_back(Box("Signal Iduna Park"));
     _deutchStadiums.push_back(Box("Olympiastadion"));
 
     _deutchStadiums[0].setBoxNumber(16);
-    _deutchStadiums[0].setBoxType(DeutchStadium);
+    _deutchStadiums[0].setBoxType(PropertyBox);
+    _deutchStadiums[0].setIsBought(false);
 
     _deutchStadiums[1].setBoxNumber(18);
-    _deutchStadiums[1].setBoxType(DeutchStadium);
+    _deutchStadiums[1].setBoxType(PropertyBox);
+    _deutchStadiums[1].setIsBought(false);
 
     _deutchStadiums[2].setBoxNumber(19);
-    _deutchStadiums[2].setBoxType(DeutchStadium);
-
-    for (auto &box : _deutchStadiums){
-        boxes.push_back(&box);
-    }
+    _deutchStadiums[2].setBoxType(PropertyBox);
+    _deutchStadiums[2].setIsBought(false);
 }
 
-EnglishStadiums::EnglishStadiums(std::vector<Box*> &boxes){
+EnglishStadiums::EnglishStadiums(){
     _englishStadiums.push_back(Box("Wembley"));
     _englishStadiums.push_back(Box("Old Trafford"));
     _englishStadiums.push_back(Box("Anfield"));
 
     _englishStadiums[0].setBoxNumber(21);
-    _englishStadiums[0].setBoxType(EnglishStadium);
+    _englishStadiums[0].setBoxType(PropertyBox);
+    _englishStadiums[0].setIsBought(false);
 
     _englishStadiums[1].setBoxNumber(23);
-    _englishStadiums[1].setBoxType(EnglishStadium);
+    _englishStadiums[1].setBoxType(PropertyBox);
+    _englishStadiums[1].setIsBought(false);
 
     _englishStadiums[2].setBoxNumber(24);
-    _englishStadiums[2].setBoxType(EnglishStadium);
-
-    for (auto &box : _englishStadiums){
-        boxes.push_back(&box);
-    }
+    _englishStadiums[2].setBoxType(PropertyBox);
+    _englishStadiums[2].setIsBought(false);
 }
 
-BrazilianStadiums::BrazilianStadiums(std::vector<Box*> &boxes){
+BrazilianStadiums::BrazilianStadiums(){
     _brazilianStadiums.push_back(Box("Maracana"));
     _brazilianStadiums.push_back(Box("Mineirao"));
     _brazilianStadiums.push_back(Box("Arena do Gremio"));
 
     _brazilianStadiums[0].setBoxNumber(26);
-    _brazilianStadiums[0].setBoxType(BrazilianStadium);
+    _brazilianStadiums[0].setBoxType(PropertyBox);
+    _brazilianStadiums[0].setIsBought(false);
 
     _brazilianStadiums[1].setBoxNumber(27);
-    _brazilianStadiums[1].setBoxType(BrazilianStadium);
+    _brazilianStadiums[1].setBoxType(PropertyBox);
+    _brazilianStadiums[1].setIsBought(false);
 
     _brazilianStadiums[2].setBoxNumber(29);
-    _brazilianStadiums[2].setBoxType(BrazilianStadium);
-
-    for (auto &box : _brazilianStadiums){
-        boxes.push_back(&box);
-    }
+    _brazilianStadiums[2].setBoxType(PropertyBox);
+    _brazilianStadiums[2].setIsBought(false);
 }
 
-SpanishStadiums::SpanishStadiums(std::vector<Box*> &boxes){
+SpanishStadiums::SpanishStadiums(){
     _spanishStadiums.push_back(Box("Camp Nou"));
     _spanishStadiums.push_back(Box("Santiago Bernabeu"));
     _spanishStadiums.push_back(Box("Benito Villamarin"));
 
     _spanishStadiums[0].setBoxNumber(31);
-    _spanishStadiums[0].setBoxType(SpanishStadium);
+    _spanishStadiums[0].setBoxType(PropertyBox);
+    _spanishStadiums[0].setIsBought(false);
 
     _spanishStadiums[1].setBoxNumber(32);
-    _spanishStadiums[1].setBoxType(SpanishStadium);
+    _spanishStadiums[1].setBoxType(PropertyBox);
+    _spanishStadiums[1].setIsBought(false);
 
     _spanishStadiums[2].setBoxNumber(34);
-    _spanishStadiums[2].setBoxType(SpanishStadium);
-
-    for (auto &box : _spanishStadiums){
-        boxes.push_back(&box);
-    }
+    _spanishStadiums[2].setBoxType(PropertyBox);
+    _spanishStadiums[2].setIsBought(false);
 }
 
-FrenchStadiums::FrenchStadiums(std::vector<Box*> &boxes){
+FrenchStadiums::FrenchStadiums(){
     _frenchStadiums.push_back(Box("Parc des Princes"));
     _frenchStadiums.push_back(Box("Stade de France"));
     
     _frenchStadiums[0].setBoxNumber(37);
-    _frenchStadiums[0].setBoxType(FrenchStadium);
+    _frenchStadiums[0].setBoxType(PropertyBox);
+    _frenchStadiums[0].setIsBought(false);
 
     _frenchStadiums[1].setBoxNumber(39);
-    _frenchStadiums[1].setBoxType(FrenchStadium);
-
-    for (auto &box : _frenchStadiums){
-        boxes.push_back(&box);
-    }
+    _frenchStadiums[1].setBoxType(PropertyBox);
+    _frenchStadiums[1].setIsBought(false);
 }
 
-// std::ostream& operator<<(std::ostream& os, const StadiumBox& stadiumBox){
-//     os << "Nom du stade : " << stadiumBox.getBoxName() << std::endl;
-//     os << "Numéro de la case : " << stadiumBox.getBoxNumber() << std::endl;
-//     os << "ID de la case : " << stadiumBox.getBoxId() << std::endl;
-//     return os;
-// }
-
-VideoBoxes::VideoBoxes(std::vector<Box*> &boxes){
+VideoBoxes::VideoBoxes(){
     _videoBoxes.push_back(VideoBox("Finale 1998"));
     _videoBoxes.push_back(VideoBox("Finale 2014"));
     _videoBoxes.push_back(VideoBox("Finale 2018"));
     _videoBoxes.push_back(VideoBox("Finale 2022"));
 
     _videoBoxes[0].setBoxNumber(5);
-    _videoBoxes[0].setBoxType(VideoBoxType);
+    _videoBoxes[0].setBoxType(PropertyBox);
+    _videoBoxes[0].setIsBought(false);
 
     _videoBoxes[1].setBoxNumber(15);
-    _videoBoxes[1].setBoxType(VideoBoxType);
+    _videoBoxes[1].setBoxType(PropertyBox);
+    _videoBoxes[1].setIsBought(false);
 
     _videoBoxes[2].setBoxNumber(25);
-    _videoBoxes[2].setBoxType(VideoBoxType);
+    _videoBoxes[2].setBoxType(PropertyBox);
+    _videoBoxes[2].setIsBought(false);
 
     _videoBoxes[3].setBoxNumber(35);
-    _videoBoxes[3].setBoxType(VideoBoxType);
-
-    for (auto &box : _videoBoxes){
-        boxes.push_back(&box);
-    }
+    _videoBoxes[3].setBoxType(PropertyBox);
+    _videoBoxes[3].setIsBought(false);
 };
 
-TaxBoxes::TaxBoxes(std::vector<Box*> &boxes){
+TaxBoxes::TaxBoxes(){
     _taxBoxes.push_back(TaxBox("Tax Box 1"));
     _taxBoxes.push_back(TaxBox("Tax Box 2"));
 
     _taxBoxes[0].setBoxNumber(4);
     _taxBoxes[0].setBoxType(TaxBoxType);
+    _taxBoxes[0].setIsBought(false);
 
     _taxBoxes[1].setBoxNumber(38);
     _taxBoxes[1].setBoxType(TaxBoxType);
-
-    for (auto &box : _taxBoxes){
-        boxes.push_back(&box);
-    }
+    _taxBoxes[1].setIsBought(false);
 }
 
-LotteryBoxes::LotteryBoxes(std::vector<Box*> &boxes){
+LotteryBoxes::LotteryBoxes(){
     _lotteryBoxes.push_back(LotteryBox("Lottery Box 1"));
     _lotteryBoxes.push_back(LotteryBox("Lottery Box 2"));
     _lotteryBoxes.push_back(LotteryBox("Lottery Box 3"));
@@ -225,38 +202,38 @@ LotteryBoxes::LotteryBoxes(std::vector<Box*> &boxes){
 
     _lotteryBoxes[0].setBoxNumber(2);
     _lotteryBoxes[0].setBoxType(LotteryBoxType);
+    _lotteryBoxes[0].setIsBought(false);
 
     _lotteryBoxes[1].setBoxNumber(7);
     _lotteryBoxes[1].setBoxType(LotteryBoxType);
+    _lotteryBoxes[1].setIsBought(false);
 
     _lotteryBoxes[2].setBoxNumber(17);
     _lotteryBoxes[2].setBoxType(LotteryBoxType);
+    _lotteryBoxes[2].setIsBought(false);
 
     _lotteryBoxes[3].setBoxNumber(22);
     _lotteryBoxes[3].setBoxType(LotteryBoxType);
+    _lotteryBoxes[3].setIsBought(false);
 
     _lotteryBoxes[4].setBoxNumber(33);
     _lotteryBoxes[4].setBoxType(LotteryBoxType);
+    _lotteryBoxes[4].setIsBought(false);
 
     _lotteryBoxes[5].setBoxNumber(36);
     _lotteryBoxes[5].setBoxType(LotteryBoxType);
-
-    for (auto &box : _lotteryBoxes){
-        boxes.push_back(&box);
-    }
+    _lotteryBoxes[5].setIsBought(false);
 }
 
-RepairBoxes::RepairBoxes(std::vector<Box*> &boxes){
+RepairBoxes::RepairBoxes(){
     _repairBoxes.push_back(RepairBox("Electricity Box"));
     _repairBoxes.push_back(RepairBox("Water Box"));
 
     _repairBoxes[0].setBoxNumber(12);
-    _repairBoxes[0].setBoxType(RepairBoxType);
+    _repairBoxes[0].setBoxType(PropertyBox);
+    _repairBoxes[0].setIsBought(false);
 
     _repairBoxes[1].setBoxNumber(28);
-    _repairBoxes[1].setBoxType(RepairBoxType);
-    
-    for (auto &box : _repairBoxes){
-        boxes.push_back(&box);
-    }
+    _repairBoxes[1].setBoxType(PropertyBox);
+    _repairBoxes[0].setIsBought(false);
 }

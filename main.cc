@@ -4,10 +4,9 @@
 #include "board.hh"
 #include "player.hh"
 #include "box.hh"
-
+// #include "interaction.hh"
 
 int main(){
-
     Board *board = new Board();  
 
     //boucle pour rentrer les joueurs et le nombre total de joueurs
@@ -68,87 +67,31 @@ int main(){
         std::cout << it->second << " with a roll of " << it->first << std::endl;
     }
 
-    ////////////////////////////////////////////////////////////////////
-
-    //création d'un vecteur d'itérateurs pour stocker les joueurs
-    std::vector<std::vector<Player>::iterator> players_iterators;
-    for (auto it = board->getPlayers().begin(); it != board->getPlayers().end(); ++it) {
-        players_iterators.push_back(it);
-    }
+    //boucle pour jouer
     while(1){
-    for(auto it = players_iterators.begin(); it != players_iterators.end(); ++it) {
-        std::cout << (*it)->getName() << ", press enter to roll the dice." << std::endl;
-        std::cin.ignore();
-        board->throwDices(**it);
-        std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << std::endl;
-        (*it)->setActualPosition(((*it)->getActualPosition() + board->dice1 + board->dice2) % 40);  //modulo 40 afin de reset la position du joueur s'il passe un tour de plateau
-        std::cout << "You are now on " << board->getBoxesMap()[(*it)->getActualPosition()].getBoxName() << std::endl;
-        std::cout << board->getBoxesMap()[(*it)->getActualPosition()].getBoxNumber() << std::endl;
-        //use of interaction function
-        switch (board->getBoxes()[(*it)->getActualPosition()]->getBoxType()) {
-            case FrenchStadium:
-                static_cast<FrenchStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case SpanishStadium:
-                static_cast<SpanishStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case BrazilianStadium:
-                static_cast<BrazilianStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case EnglishStadium:
-                static_cast<EnglishStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case DeutchStadium:
-                static_cast<DeutchStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case ArgentinianStadium:
-                static_cast<ArgentinianStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case RussianStadium:
-                static_cast<RussianStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case SouthAfricanStadium:
-                static_cast<SouthAfricanStadiums*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case VideoBoxType:
-                static_cast<VideoBoxes*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case RepairBoxType:
-                static_cast<RepairBoxes*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case StartBoxType:
-                static_cast<StartBox*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case FreeParkBoxType:
-                static_cast<FreePark*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case JailBoxType:
-                static_cast<JailBox*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case RedCardBoxType:
-                static_cast<RedCardBox*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case LotteryBoxType:
-                static_cast<LotteryBoxes*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case TaxBoxType:
-                static_cast<TaxBoxes*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
-            case VisitBoxType:
-                static_cast<VisitBox*>(board->getBoxes()[(*it)->getActualPosition()])->interaction(**it);
-                break;
+        for(int i=0; i < board->nbPlayers; i++){
+            std::cout << "It's " << board->getPlayers()[i].getName() << "'s turn." << std::endl;
+            std::cout << "You are on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
+            std::cout << "Press enter to roll the dice." << std::endl;
+            std::cin.ignore();
+            board->throwDices(board->getPlayers()[i]);
+            std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << "." << std::endl;
+            board->getPlayers()[i].setActualPosition((board->getPlayers()[i].getActualPosition() + board->dice1 + board->dice2) % 40);  //modulo 40 afin de reset la position du joueur s'il passe un tour de plateau
+            std::cout << "You are now on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
+            std::cout << "Press enter to continue." << std::endl;
+            board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].interaction(board->getPlayers()[i]);
+            std::cout << "-------------------------------------------" << std::endl;
+            std::cin.ignore();
         }
-
-
-        std::cout << "-------------------------------------------" << std::endl;
     }
-}
-
-
-    // for(auto& box: board->getBoxes()){
-    //     std::cout << box.getBoxName() << std::endl;
-    //     std::cout << box.getBoxNumber() << std::endl;
-    // }
+    // case(board->getPlayers()[2].getActualPosition()
     
+
+
+
+
+
+
+
     return 0;
 }

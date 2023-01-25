@@ -7,18 +7,10 @@
 #include "player.hh"
 
 enum BoxType {
-    FrenchStadium,
-    SpanishStadium,
-    BrazilianStadium,
-    EnglishStadium,
-    DeutchStadium,
-    ArgentinianStadium,
-    RussianStadium,
-    SouthAfricanStadium,
-    VideoBoxType,
-    RepairBoxType,
     StartBoxType,
-    FreeParkBoxType,
+    PropertyBox,
+    PenaltyBox,
+    FreeParkBox,
     JailBoxType,
     RedCardBoxType,
     LotteryBoxType,
@@ -29,10 +21,16 @@ enum BoxType {
 class Box{
     static unsigned int cpt;
     protected:
+        double _price;
         int _boxId;
         std::string _boxName;
         int _boxNumber;
-        BoxType _boxType;
+        int _boxType;
+        double _mortgagePrice;  //prix hypothèque
+        bool _isBought;
+        int _rent;
+        int _nbStands = 0;  //nb de stands (maisons) posées sur la carte (max 4) (0 par défaut)
+        int _nbHotels = 0;  //nb d'hôtels posés sur la carte (max 1) (0 par défaut)
 
     public:
         //constructors
@@ -44,88 +42,75 @@ class Box{
         int getBoxNumber() const {return _boxNumber;}
         std::string getBoxName() const {return _boxName;}
         int getBoxId() const {return _boxId;}    
-        BoxType getBoxType(){return _boxType;}
+        int getBoxType() const {return _boxType;}
+        double getPrice() const {return _price;}
+        double getMortgagePrice() const {return _mortgagePrice;}
+        bool getIsBought() const {return _isBought;}
+        int getRent() const {return _rent;}
         
         //setters
         void setBoxNumber(int boxNumber){_boxNumber = boxNumber;}
         void setBoxName(std::string name){_boxName = name;}
-        void setBoxType(BoxType type){_boxType = type;}
-        
-        
-};
-
-class PropertyBox: public Box{
-    protected:
-        double _price;
-        double _mortgagePrice;  //prix hypothèque
-        bool _isBought;
-        int _rent;
-
-    public:
-        //constructors
-        PropertyBox(){};
-        ~PropertyBox(){};
-
-        virtual void interaction(Player &player) = 0;
-
-        //getters
-        double getPrice() const {return _price;}
-        double getMortgagePrice() const {return _mortgagePrice;}
-        bool getIsBought() {return _isBought;} //pas de const car on peut acheter une propriété
-        int getRent() const {return _rent;}
-
-        //setters
+        void setBoxId(int boxId){_boxId = boxId;}
+        void setBoxType(BoxType boxType){_boxType = boxType;}
         void setPrice(double price){_price = price;}
         void setMortgagePrice(double mortgagePrice){_mortgagePrice = mortgagePrice;}
         void setIsBought(bool bought){_isBought = bought;}
         void setRent(int rent){_rent = rent;}
-}; 
 
-class FrenchStadiums: public PropertyBox{
+        void interaction(Player &player) {
+        std::cout << "Vous êtes sur la case " << this->getBoxName() << std::endl;
+        std::cout << "Vous avez " << player.getMoney() << " euros" << std::endl;
+
+        if(this->getBoxType() == PropertyBox && this->getIsBought() == false){
+            std::cout << "Vous pouvez acheter ce stade pour " << this->getPrice() << " euros" << std::endl;
+            std::cout << "Que voulez vous faire ?" << std::endl;
+            std::cout << "1. Acheter la case" << std::endl;
+            std::cout << "2. Ne rien faire" << std::endl;
+            int choice;
+            std::cin >> choice;
+            switch (choice) {
+                case 1:
+                    if (player.getMoney() >= this->getPrice()) {
+                        player.addBox(*this);
+                        player.setMoney(player.getMoney() - this->getPrice());
+                        std::cout << "Vous avez acheté le stade " << this->getBoxName() << std::endl;
+                    } 
+                    else {
+                        std::cout << "Vous n'avez pas assez d'argent pour acheter ce stade" << std::endl;
+                    }
+                    break;
+                case 2:
+                    std::cout << "Vous ne faites rien" << std::endl;
+                    break;
+                default:
+                    std::cout << "Vous ne faites rien" << std::endl;
+                    break;
+            }
+        }
+            // else if (this->getBoxType() == PropertyBox && this->getIsBought() == true) {}
+        }
+};
+
+class FrenchStadiums: public Box{
     public:
         //constructors
-        FrenchStadiums(){};
-        FrenchStadiums(std::vector<Box*> &boxes);
+        FrenchStadiums();
         ~FrenchStadiums(){};
-
-        void interaction(Player &player){
-            if(getIsBought() == 0){
-                std::cout << "Do you want to buy this stadium ? (y/n)" << std::endl;
-                char answer;
-                std::cin >> answer;
-                if(answer == 'y'){
-                    player.addMoney(-getPrice());
-                    setIsBought(1);
-                    player.getOwnedBoxes().push_back(*this);
-                }
-            }
-            else{
-                std::cout << "You have to pay " << getRent() << " to the owner" << std::endl;
-                player.addMoney(-getRent());
-                
-            }
-        };
 
         //getters
         std::vector<Box> getFrenchStadiums() const {return _frenchStadiums;}
-        
-
-        //setters
-        
 
     protected:
         std::vector<Box>_frenchStadiums;
-        
 };
 
-class SpanishStadiums: public PropertyBox{
+class SpanishStadiums: public Box{
     public:
         //constructors
-        SpanishStadiums(){};
-        SpanishStadiums(std::vector<Box*> &boxes);
+        SpanishStadiums();
         ~SpanishStadiums() {};
 
-        void interaction(Player &player){};
 
         //getters
         std::vector<Box> getSpanishStadiums() const {return _spanishStadiums;}
@@ -134,14 +119,12 @@ class SpanishStadiums: public PropertyBox{
         std::vector<Box>_spanishStadiums;
 };
 
-class BrazilianStadiums: public PropertyBox{
+class BrazilianStadiums: public Box{
     public:
         //constructors
-        BrazilianStadiums(){};
-        BrazilianStadiums(std::vector<Box*> &boxes);
+        BrazilianStadiums();
         ~BrazilianStadiums() {};
 
-        void interaction(Player &player){};
 
         //getters
         std::vector<Box> getBrazilianStadiums() const {return _brazilianStadiums;}
@@ -150,14 +133,11 @@ class BrazilianStadiums: public PropertyBox{
         std::vector<Box>_brazilianStadiums;
 };
 
-class EnglishStadiums: public PropertyBox{
+class EnglishStadiums: public Box{
     public:
         //constructors
-        EnglishStadiums(){};
-        EnglishStadiums(std::vector<Box*> &boxes);
+        EnglishStadiums();
         ~EnglishStadiums() {};
-
-        void interaction(Player &player){};
 
         //getters
         std::vector<Box> getEnglishStadiums() const {return _englishStadiums;}
@@ -166,14 +146,11 @@ class EnglishStadiums: public PropertyBox{
         std::vector<Box>_englishStadiums;
 };
 
-class DeutchStadiums: public PropertyBox{
+class DeutchStadiums: public Box{
     public:
         //constructors
-        DeutchStadiums(){};
-        DeutchStadiums(std::vector<Box*> &boxes);
+        DeutchStadiums();
         ~DeutchStadiums() {};
-
-        void interaction(Player &player){};
 
         //getters
         std::vector<Box> getDeutchStadiums() const {return _deutchStadiums;}
@@ -182,14 +159,11 @@ class DeutchStadiums: public PropertyBox{
         std::vector<Box>_deutchStadiums;
 };
 
-class ArgentinianStadiums: public PropertyBox{
+class ArgentinianStadiums: public Box{
     public:
         //constructors
-        ArgentinianStadiums(){};
-        ArgentinianStadiums(std::vector<Box*> &boxes);
+        ArgentinianStadiums();
         ~ArgentinianStadiums() {};
-
-        void interaction(Player &player){};
 
         //getters
         std::vector<Box> getArgentinianStadiums() const {return _argentinianStadiums;}
@@ -198,14 +172,11 @@ class ArgentinianStadiums: public PropertyBox{
         std::vector<Box>_argentinianStadiums;
 };
 
-class RussianStadiums: public PropertyBox{
+class RussianStadiums: public Box{
     public:
         //constructors
-        RussianStadiums(){};
-        RussianStadiums(std::vector<Box*> &boxes);
+        RussianStadiums();
         ~RussianStadiums() {};
-
-        void interaction(Player &player){};
 
         //getters
         std::vector<Box> getRussianStadiums() const {return _russianStadiums;}
@@ -214,14 +185,11 @@ class RussianStadiums: public PropertyBox{
         std::vector<Box>_russianStadiums;
 };
 
-class SouthAfricanStadiums: public PropertyBox{
+class SouthAfricanStadiums: public Box{
     public:
         //constructors
-        SouthAfricanStadiums(){};
-        SouthAfricanStadiums(std::vector<Box*> &boxes);
+        SouthAfricanStadiums();
         ~SouthAfricanStadiums() {};
-
-        void interaction(Player &player){};
 
         //getters
         std::vector<Box> getSouthAfricanStadiums() const {return _southAfricanStadiums;}
@@ -235,22 +203,17 @@ class SouthAfricanStadiums: public PropertyBox{
 Il y a 4 cases vidéos : en avoir n multiplie par n le loyer si un joueur tombe sur une des 4
 */
 
-class VideoBox: public PropertyBox{  
+class VideoBox: public Box{  
     public:
         //constructors
         VideoBox(){}; //{_boxId = cpt++;};
         VideoBox(std::string name); //{setBoxName(name); _boxId = cpt++;}
-        
-        void interaction(Player &player){};        
 };
 
 class VideoBoxes: public VideoBox{
     public:
         //constructors
-        VideoBoxes(){};
-        VideoBoxes(std::vector<Box*> &boxes); //{_boxId = cpt++;};
-
-        void interaction(Player &player){};  
+        VideoBoxes(); //{_boxId = cpt++;};
 
         //getters
         std::vector<VideoBox> getVideoBoxes() const {return _videoBoxes;}
@@ -259,24 +222,17 @@ class VideoBoxes: public VideoBox{
         std::vector<VideoBox>_videoBoxes;      
 };
 
-class RepairBox: public PropertyBox{
+class RepairBox: public Box{
     public:
         //constructors
         RepairBox(){};
-        RepairBox(std::string name);
-
-        void interaction(Player &player){};
+        RepairBox(std::string name);  
 };
-
-
 
 class RepairBoxes: public RepairBox{
     public:
         //constructors
-        RepairBoxes(){};
-        RepairBoxes(std::vector<Box*> &boxes);
-
-        void interaction(Player &player){}
+        RepairBoxes();
 
         //getters
         std::vector<RepairBox> getRepairBoxes() const {return _repairBoxes;}
@@ -285,65 +241,50 @@ class RepairBoxes: public RepairBox{
         std::vector<RepairBox>_repairBoxes;
 };
 
-class HappeningBox: public Box{
-    public:
-
-    protected:
-
-};
-
-class StartBox: public HappeningBox{
+class StartBox: public Box{
     public:
         //constructors
         StartBox() {setBoxName("Start Box"); setBoxNumber(0); setBoxType(StartBoxType);}
         ~StartBox() {};
-
-        void interaction(Player &player){player.addMoney(player.getMoney() + 200);}
 };
 
-class FreePark: public HappeningBox{
+class FreePark: public Box{
     public:
         //constructors
-        FreePark() {setBoxName("Free Park"); setBoxNumber(20); setBoxType(FreeParkBoxType);}
+        FreePark() {setBoxName("Free Park"); setBoxNumber(20); setBoxType(FreeParkBox);}
         ~FreePark() {};
 
-        void interaction(Player &player){player.addMoney(player.getMoney() );}
 };
 
-class JailBox: public HappeningBox{
+class JailBox: public Box{
     public:
         //constructors
         JailBox() {setBoxName("Jail Box"); setBoxNumber(99); setBoxType(JailBoxType);}
         ~JailBox() {};
 
-        void interaction(Player &player){}
 };
 
-class RedCardBox: public HappeningBox{
+class RedCardBox: public Box{
     public:
         //constructors
         RedCardBox() {setBoxName("Red Card Box"); setBoxNumber(30); setBoxType(RedCardBoxType);}
         ~RedCardBox() {};
 
-        void interaction(Player &player){};
 };
 
-class LotteryBox: public HappeningBox{
+class LotteryBox: public Box{
     public: 
         //constructors
         LotteryBox(){}
         LotteryBox(std::string name);
 
-        void interaction(Player &player){}
 };
 
 class LotteryBoxes: public LotteryBox{
     public:
         //constructors
-        LotteryBoxes(){};
-        LotteryBoxes(std::vector<Box*> &boxes);
+        LotteryBoxes();
 
-        void interaction(Player &player){}
 
         //getters
         std::vector<LotteryBox> getLotteryBoxes() const {return _lotteryBoxes;}
@@ -352,22 +293,19 @@ class LotteryBoxes: public LotteryBox{
         std::vector<LotteryBox>_lotteryBoxes;
 };
 
-class TaxBox: public HappeningBox{
+class TaxBox: public Box{
     public:
         //constructors
         TaxBox(){}
         TaxBox(std::string name);
 
-        void interaction(Player &player){}
 };
 
 class TaxBoxes: public TaxBox{
     public:
         //constructors
-        TaxBoxes(){};
-        TaxBoxes(std::vector<Box*> &boxes);
+        TaxBoxes();
 
-        void interaction(Player &player){player.addMoney(-200);}
         void addTaxMoney(Board &board){board.addTaxMoney(200);}
 
         //getters
@@ -383,5 +321,4 @@ class VisitBox: public Box{
         VisitBox(){setBoxName("Visit Box"); setBoxNumber(10); setBoxType(VisitBoxType);}
         ~VisitBox(){}
 
-        void interaction(Player &player){}
 };
