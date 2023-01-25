@@ -69,29 +69,24 @@ int main(){
 
     //boucle pour jouer
     while(1){
-        for(int i=0; i < board->nbPlayers; i++){
-            std::cout << "It's " << board->getPlayers()[i].getName() << "'s turn." << std::endl;
-            std::cout << "You are on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
-            std::cout << "Press enter to roll the dice." << std::endl;
-            std::cin.ignore();
-            board->throwDices(board->getPlayers()[i]);
-            std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << "." << std::endl;
-            board->getPlayers()[i].setActualPosition((board->getPlayers()[i].getActualPosition() + board->dice1 + board->dice2) % 40);  //modulo 40 afin de reset la position du joueur s'il passe un tour de plateau
-            std::cout << "You are now on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
-            std::cout << "Press enter to continue." << std::endl;
-            board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].interaction(board->getPlayers()[i]);
-            std::cout << "-------------------------------------------" << std::endl;
-            std::cin.ignore();
+        for(auto it = playersAndScores.rbegin(); it != playersAndScores.rend(); ++it){
+            for(int i = 0; i < board->nbPlayers; i++){
+                if(it->second == board->getPlayers()[i].getName()){
+                    std::cout << "It's " << board->getPlayers()[i].getName() << "'s turn." << std::endl;
+                    std::cout << "You are on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
+                    std::cout << "Press enter to roll the dice." << std::endl;
+                    std::cin.ignore();
+                    board->throwDices(board->getPlayers()[i]);
+                    std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << "." << std::endl;
+                    board->getPlayers()[i].setActualPosition((board->getPlayers()[i].getActualPosition() + board->dice1 + board->dice2) % 40);  //modulo 40 afin de reset la position du joueur s'il passe un tour de plateau
+                    std::cout << "You are now on " << board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].getBoxName() << "." << std::endl;
+                    std::cout << "Press enter to continue." << std::endl;
+                    board->getBoxesMap()[board->getPlayers()[i].getActualPosition()].interaction(board->getPlayers()[i]);
+                    std::cout << "-------------------------------------------" << std::endl;
+                    std::cin.ignore();
+                }
+            }
         }
     }
-    // case(board->getPlayers()[2].getActualPosition()
-    
-
-
-
-
-
-
-
     return 0;
 }
