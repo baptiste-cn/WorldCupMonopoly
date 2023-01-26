@@ -40,7 +40,7 @@ class Board{
         int getTaxMoney() const {return _taxMoney;}
         std::vector<Box> getBoxes() const {return _boxes;}
         std::vector<Player>& getPlayers() {return _players;} //pas de const car on modifie le vecteur
-        std::map<int, Box> getBoxesMap() const {return _boxesMap;}
+        std::map<int, Box>& getBoxesMap()  {return _boxesMap;}
 
         //setters
         void setNbPlayers(int nbPlayers){nbPlayers = nbPlayers;}

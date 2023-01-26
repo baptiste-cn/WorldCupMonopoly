@@ -98,6 +98,26 @@ void myRenderText(const char *m, int x, int y)
     SDL_FreeSurface(surfaceMessage);
 }
 
+void myRenderText2(const char *m, int x, int y)
+{
+    SDL_Color col1 = {134,134,134};
+    SDL_Surface *surfaceMessage =
+        TTF_RenderText_Solid(Sans, m, col1);
+    SDL_Texture *Message =
+        SDL_CreateTextureFromSurface(renderer,
+                                     surfaceMessage);
+
+    SDL_Rect Message_rect;
+    Message_rect.x = x;
+    Message_rect.y = y;
+    Message_rect.w = surfaceMessage->w;
+    Message_rect.h = surfaceMessage->h;
+
+    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+    SDL_DestroyTexture(Message);
+    SDL_FreeSurface(surfaceMessage);
+}
+
 void manageRedraw()
 {
     int cntplayer = 0;
@@ -308,7 +328,66 @@ void manageRedraw()
     // Affiche les textes
     myRenderText(std::to_string(board->getPlayers()[board->getWhosPlaying()].getMoney()).c_str(), 1198, 163);
     myRenderText(board->getPlayers()[board->getWhosPlaying()].getName().c_str(), 1291, 227);
-    myRenderText("3", 1008, 325);
+    int xcnt=1008;
+    int ycnt=325;
+    //for(auto it = board->getPlayers()[board->getWhosPlaying()].getOwnedBoxes().begin(); it != board->getPlayers()[board->getWhosPlaying()].getOwnedBoxes().end(); it++)
+    for(int i=0; i<40; i++)
+    {
+        //std::cout<<"1 Terrain :" << board->getBoxesMap()[i].getBoxName() << std::endl;
+        //std::cout<<"2 Owner :" << i << board->getBoxesMap()[i].getOwner() << std::endl;
+        
+        if(board->getBoxesMap()[i].getOwner()==board->getPlayers()[board->getWhosPlaying()].getName())
+        {
+            //std::cout<<"1 Terrain :" << board->getBoxesMap()[i].getBoxName() << std::endl;
+            //std::cout<<"2 Owner :" << board->getBoxesMap()[i].getOwner() << std::endl;
+            myRenderText((board->getBoxesMap()[i].getBoxName()).c_str(), xcnt, ycnt);
+            ycnt+=25;
+        }
+        //std::cout<<" Terrain occupé" << (**it).getBoxName() << std::endl;
+        //myRenderText((board->getPlayers()[board->getWhosPlaying()].getOwnedBoxes()[it]->getBoxName()).c_str(), xcnt, ycnt);
+    }
+    //Render Properties infos
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==PropertyBox){
+        int id = board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxId();
+        if(id==5 || id==15 || id==25 || id==35){
+
+        }
+        else{
+        myRenderText(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxName().c_str(), 1010, 790);
+        //Attrubutes names:
+        myRenderText2("Price:", 1010, 820);
+        myRenderText2("Rent:", 1010, 850);
+        myRenderText2("Price for Upgrades:", 1010, 880);
+        //attributes values:
+        myRenderText((std::to_string(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getPrice())+" M").c_str(), 1120, 820);
+        myRenderText((std::to_string(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getRent())+" M").c_str(), 1110, 850);
+        myRenderText((std::to_string(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getPriceUpgrade())+" M").c_str(), 1360, 880);
+        }
+    }
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==StartBoxType){
+        myRenderText("Start: Recevez 200 M lorsque", 1010, 780);
+        myRenderText("vous passez par cette case", 1010, 810);
+    }
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==PenaltyBoxType){
+        myRenderText("TUUUT Carton jaune", 1010, 780);//Indiquer le nombre de cartons jaunes
+    }
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==RedCardBoxType){
+        myRenderText("Carton Rouge pour une ", 1010, 780);//ajouter le nb de tours
+        myRenderText("durée de x tour", 1010, 810);//ajouter le nb de tours
+    }
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==FreeParkBox){
+        myRenderText("Terrain Libre: Récupérez tout ce ", 1010, 780);//ajouter l'argent reçu
+        myRenderText("que vous trouvez sur le terrain", 1010, 810);//ajouter l'argent reçu
+    }
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==LotteryBoxType){
+        myRenderText("Lotterie: Evenement X ", 1010, 780);//ajouter l'evenement
+    }
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==TaxBoxType){
+        myRenderText("Ouch ! Vous payez des taxes", 1010, 780);//ajouter l'argent retiré
+    }
+    if(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType()==VisitBoxType){
+        myRenderText("Simple Visite", 1010, 780);//ajouter l'argent retiré
+    }
     // Show what was drawn
     SDL_RenderPresent(renderer);
 }
@@ -393,8 +472,8 @@ int main()
     init_sdl();
 
     // ==================================TO REMOVE==================================
-    board->getPlayers()[0].addMoney(2300);
-    board->getPlayers()[1].addMoney(5600);
+    board->getPlayers()[0].addMoney(1500);
+    board->getPlayers()[1].addMoney(1500);
     // ==============================================================================
     while (!quit)
     {
@@ -420,10 +499,6 @@ int main()
                     std::cout << board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxNumber() << std::endl;
                     affichage_interactions = board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].interaction(board->getPlayers()[board->getWhosPlaying()]);
                     std::cout << "-------------------------------------------" << std::endl;
-                    // if(board->getPlayers()[board->getWhosPlaying()].canBuy()==1)affichage_interactions = 2;
-                    // else if(board->getPlayers()[board->getWhosPlaying()].canUpgrade()==1)affichage_interactions = 3;
-                    // else affichage_interactions = 1;
-                    //affichage_interactions = 2; //A commenter
                     manageRedraw();
                 }
             }
@@ -432,20 +507,22 @@ int main()
                 if ((mx > 1037 && mx < 1270) && (my < 150)) // Bouton Acheter Propriete/upgrader
                 {
                     if(affichage_interactions == 2){
-                        board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].acheter(board->getPlayers()[board->getWhosPlaying()]);
+                        std::cout << board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].getBoxNumber() << std::endl;
+                        std::cout << board->getPlayers()[board->getWhosPlaying()].getActualPosition() << std::endl;
+                        board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()];
+                        (board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()]).acheter(board->getPlayers()[board->getWhosPlaying()]);
+                        std::cout <<"le propriétaire est "<< board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].getOwner()<< std::endl;
                     }
                     else if(affichage_interactions == 3){
                         board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].upgrader(board->getPlayers()[board->getWhosPlaying()]);
                     }
                     // Ajouter un delay pour confirmer achat et affichage
-                    // passermain(); //Fonction à créer qui passe la main au joueur suivant
                     board->setWhosPlaying((board->getWhosPlaying() + 1) % board->getPlayers().size());
                     std::cout << "Acheter/Upgrader" << std::endl;
                     affichage_interactions = 0;
                 }
                 if ((mx > 1329 && mx < 1600) && (my < 150)) // Bouton lancer les dés
                 {
-                    // passermain(); //Fonction à créer qui passe la main au joueur suivant
                     board->setWhosPlaying((board->getWhosPlaying() + 1) % board->getPlayers().size());
                     std::cout << "Passer la main" << std::endl;
                     affichage_interactions = 0;

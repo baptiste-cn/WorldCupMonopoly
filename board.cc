@@ -10,7 +10,7 @@ Board::Board(){
     // On crée les cases du plateau
     // cases spéciales uniques
     StartBox start;
-    JailBox jail;
+    PenaltyBox penalty;
     VisitBox visitBox;
     FreePark freePark;
     RedCardBox redCardBox;
@@ -34,7 +34,7 @@ Board::Board(){
     // On ajoute les cases au plateau
     // cases spéciales uniques
     _boxes.push_back(start);
-    _boxes.push_back(jail);
+    _boxes.push_back(penalty);
     _boxes.push_back(visitBox);
     _boxes.push_back(freePark);
     _boxes.push_back(redCardBox);

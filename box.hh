@@ -10,9 +10,8 @@ enum BoxType
 {
     StartBoxType,
     PropertyBox,
-    PenaltyBox,
+    PenaltyBoxType,
     FreeParkBox,
-    JailBoxType,
     RedCardBoxType,
     LotteryBoxType,
     TaxBoxType,
@@ -21,14 +20,14 @@ enum BoxType
 
 class Box
 {
-    static unsigned int cpt;
-    std::string _owner; 
+    static unsigned int cpt; 
 
 protected:
-    double _price;
+    int _price;
     int _priceupgrade;
     int _boxId;
-    std::string _boxName;
+    std::string _boxName = "none";
+    std::string _owner = "none";
     int _boxNumber;
     int _boxType;
     double _mortgagePrice; // prix hypothèque
@@ -48,7 +47,7 @@ public:
     std::string getBoxName() const { return _boxName; }
     int getBoxId() const { return _boxId; }
     int getBoxType() const { return _boxType; }
-    double getPrice() { return _price; } // pas de const : on va modifier le prix des cases
+    int getPrice() { return _price; } // pas de const : on va modifier le prix des cases
     double getMortgagePrice() const { return _mortgagePrice; }
     bool getIsBought() const { return _isBought; }
     int getRent() const { return _rent; }
@@ -60,12 +59,12 @@ public:
     void setBoxName(std::string name) { _boxName = name; }
     void setBoxId(int boxId) { _boxId = boxId; }
     void setBoxType(BoxType boxType) { _boxType = boxType; }
-    void setPrice(double price) { _price = price; }
+    void setPrice(int price) { _price = price; }
     void setMortgagePrice(double mortgagePrice) { _mortgagePrice = mortgagePrice; }
     void setIsBought(bool bought) { _isBought = bought; }
     void setRent(int rent) { _rent = rent; }
     void setPriceUpgrade(int priceupgrade) { _priceupgrade = priceupgrade; }
-    void setOwner(std::string owner) { _owner = owner; }
+    void setOwner(std::string owner) { std::cout << "Owner mis à jour" << std::endl; _owner = owner; }
 
     int interaction(Player &player)
     {
@@ -73,14 +72,14 @@ public:
         // std::cout << "Que voulez vous faire ?" << std::endl;
         // std::cout << "1. Acheter le stade" << std::endl;
         // std::cout << "2. Ne rien faire" << std::endl;
-        if (player.getMoney() >= this->getPrice() && this->getIsBought() == false)
+        if (player.getMoney() >= this->getPrice() && this->getIsBought() == false && this->getBoxType()==PropertyBox)
         {
-            std::cout << "Vous pouvez acheter le stade " << this->getBoxName() << " pour " << this->getPrice() << " M" << std::endl;
+            std::cout << "Vous pouvez acheter le terrain " << this->getBoxName() << " pour " << this->getPrice() << " M" << std::endl;
             return 2;
         }
         else
         {
-            std::cout << "Vous ne pouvez pas acheter le stade " << this->getBoxName() << " pour " << this->getPrice() << " M" << std::endl;
+            std::cout << "Vous ne pouvez pas acheter le terrain "<< std::endl;
             return 1;
         }
         if (this->getOwner() == player.getName())
@@ -104,8 +103,9 @@ public:
         player.addBox(*this);
         this->setIsBought(true);
         this->setOwner(player.getName());
+        std::cout << "Le propriétaire est " << this->getOwner() << std::endl;
         player.setMoney(player.getMoney() - this->getPrice());
-        std::cout << "Vous avez acheté le stade " << this->getBoxName() << std::endl;
+        std::cout << "Vous avez acheté le terrain " << this->getBoxName() << std::boolalpha << this->getIsBought() << std::endl;
         std::cout << "Il vous reste " << player.getMoney() << std::endl;
     }
 
@@ -114,7 +114,7 @@ public:
         player.setMoney(player.getMoney() - this->getPriceUpgrade());
         this->setPriceUpgrade(this->getPriceUpgrade() * 2); // modifier les coefs comme sur le vrai monopoly
         this->setPrice(this->getPrice() * 2);               // modifier les coefs comme sur le vrai monopoly
-        std::cout << "Vous avez upgradé le stade " << this->getBoxName() << std::endl;
+        std::cout << "Vous avez upgradé le terrain " << this->getBoxName() << std::endl;
     }
 };
 
@@ -302,19 +302,6 @@ public:
     ~FreePark(){};
 };
 
-class JailBox : public Box
-{
-public:
-    // constructors
-    JailBox()
-    {
-        setBoxName("Jail Box");
-        setBoxNumber(99);
-        setBoxType(JailBoxType);
-    }
-    ~JailBox(){};
-};
-
 class RedCardBox : public Box
 {
 public:
@@ -322,7 +309,7 @@ public:
     RedCardBox()
     {
         setBoxName("Red Card Box");
-        setBoxNumber(30);
+        setBoxNumber(10);
         setBoxType(RedCardBoxType);
     }
     ~RedCardBox(){};
@@ -334,6 +321,19 @@ public:
     // constructors
     LotteryBox() {}
     LotteryBox(std::string name);
+};
+
+class PenaltyBox : public Box
+{
+public:
+    // constructors
+    PenaltyBox()
+    {
+        setBoxName("Penalty Box");
+        setBoxNumber(30);
+        setBoxType(PenaltyBoxType);
+    }
+    ~PenaltyBox(){};
 };
 
 class LotteryBoxes : public LotteryBox
