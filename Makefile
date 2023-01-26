@@ -1,5 +1,5 @@
 CC=g++
-CCFLAGS= -Wall -Werror -std=c++11 -g
+CCFLAGS= -Wall -std=c++11 -g
 LIBFLAGS= -I/usr/include/SDL2
 LIBFLAGS2= -lSDL2_image -lSDL2_ttf -lSDL2
 SRC= $(wildcard *.cc)

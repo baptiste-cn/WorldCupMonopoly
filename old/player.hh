@@ -17,16 +17,13 @@ class Player: public Board{
         void addMoney(int amount){_money = amount;}
         void setMoney(int amount){_money = amount;}
         void setActualPosition(int position){_actualPosition = position;}
-        void setDaysInJail(int days){_daysInJail = days;}
-        void setIsJailed(bool isJailed){_isJailed = isJailed;}
+
 
         //getters
         int getMoney() const {return _money;}
         std::string getName() const {return _name;}
         int getActualPosition() const {return _actualPosition;}
         std::vector <Box*> getOwnedBoxes() const {return _ownedBoxes;}
-        int getDaysInJail() {return _daysInJail;}
-        bool getIsJailed() {return _isJailed;}
 
         //others
         std::string _name;

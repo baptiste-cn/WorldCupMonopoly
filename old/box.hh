@@ -66,15 +66,22 @@ public:
     void setPriceUpgrade(int priceupgrade) { _priceupgrade = priceupgrade; }
     void setOwner(std::string owner) { std::cout << "Owner mis à jour" << std::endl; _owner = owner; }
 
-    void addTaxMoney(Board &board) { board.addTaxMoney(200); }
-
-    int interaction(Player &player, Board &board)
+    int interaction(Player &player)
     {
         std::cout << "Vous êtes sur la case " << this->getBoxName() << std::endl;
         // std::cout << "Que voulez vous faire ?" << std::endl;
         // std::cout << "1. Acheter le stade" << std::endl;
         // std::cout << "2. Ne rien faire" << std::endl;
-
+        if (player.getMoney() >= this->getPrice() && this->getIsBought() == false && this->getBoxType()==PropertyBox)
+        {
+            std::cout << "Vous pouvez acheter le terrain " << this->getBoxName() << " pour " << this->getPrice() << " M" << std::endl;
+            return 2;
+        }
+        else
+        {
+            std::cout << "Vous ne pouvez pas acheter le terrain "<< std::endl;
+            return 1;
+        }
         if (this->getOwner() == player.getName())
         { // chercher dans le vecteur de box du joueur
             std::cout << "Vous êtes propriétaire de ce stade" << std::endl;
@@ -88,85 +95,6 @@ public:
                 std::cout << "Vous ne pouvez pas upgrader le stade " << std::endl;
                 return 1;
             }
-        }
-        else if (player.getMoney() >= this->getPrice() && this->getIsBought() == false && this->getBoxType()==PropertyBox)
-        {
-            std::cout << "Vous pouvez acheter le terrain " << this->getBoxName() << " pour " << this->getPrice() << " M" << std::endl;
-            return 2;
-        }
-        else if(this->getBoxType()==StartBoxType){
-            std::cout << "Vous êtes sur la case départ, vous empochez donc 200 M" << std::endl;
-            player.setMoney(player.getMoney()+200);
-            return 1;
-        }
-        else if(this->getBoxType()==VisitBoxType){
-            std::cout << "Vous êtes sur la case visite" << std::endl;
-            return 1;
-        }
-        else if(this->getBoxType()==FreeParkBox){
-            board.setMessage("Vous êtes sur la case parc gratuit, vous empochez l'argent du plateau, soit "+std::to_string(board.getTaxMoney())+" M");
-            std::cout << "Vous êtes sur la case parc gratuit, vous empochez l'argent du plateau, soit " << board.getTaxMoney() << " M" << std::endl;
-            player.setMoney(player.getMoney()+board.getTaxMoney());
-            return 4;
-        }
-        else if(this->getBoxType()==TaxBoxType){
-            std::cout << "Vous êtes sur la case taxe, vous perdez 100 M" << std::endl;
-            player.setMoney(player.getMoney()-100);
-            board.addTaxMoney(100);
-            return 1;
-        }
-        else if(this->getBoxType()==LotteryBoxType){
-            std::cout << "Vous participez aux festivités locales !" << std::endl;
-            int random = rand() % 4 + 1;
-            if(random==0){
-                board.setMessage("Vous devez cotiser pour l'entretien du terrain : -50 M");
-                std::cout << "Vous devez cotiser pour l'entretien du terrain : -50 M" << std::endl;
-                player.setMoney(player.getMoney()-50);
-            }
-            else if(random==1){
-                board.setMessage("Félicitations ! Vous avez gagné le concours de dribble : + 30 M");
-                std::cout << "Félicitations ! Vous avez gagné le concours de dribble : + 30 M" << std::endl;
-                player.setMoney(player.getMoney()+30);
-            }
-            else if(random==2){
-                board.setMessage("Vous récupérez vos gains sur le pari du match en cours : +20 M");
-                std::cout << "Vous récupérez vos gains sur le pari du match en cours : +20 M" << std::endl;
-                player.setMoney(player.getMoney()+20);
-            }
-            else if(random==3){
-                board.setMessage("Le tacle par derrière deux pieds décollés n'a jamais été un geste technique... Carton rouge !");
-                std::cout << "Le tacle par derrière deux pieds décollés n'a jamais été un geste technique... Carton rouge !" << std::endl;
-                player.setActualPosition(99);
-                player.setIsJailed(true);
-            }
-            else if(random==4){
-                board.setMessage("Quelle faute lamentable ! Vous étiez sur le point de marquer... Direction la case départ pour vous rétablir");
-                std::cout << "Quelle faute lamentable ! Vous étiez sur le point de marquer... Direction la case départ pour vous rétablir" << std::endl;
-                player.setActualPosition(0);
-            }
-            return 4;
-        }
-        else if(this->getBoxType()==PenaltyBoxType){
-            std::cout << "Vous avez reçu un carton rouge, direction la prison !" << std::endl;
-            player.setIsJailed(true);
-            player.setActualPosition(99);
-            player.setDaysInJail(3);
-        }
-        else if(this->getBoxType()==RedCardBoxType){
-            board.setMessage("Vous êtes toujours en prison ! Vous sortez dans "+std::to_string(player.getDaysInJail()-1)+" tours.");
-            std::cout << "Vous êtes toujours en prison ! Vous sortez dans " << player.getDaysInJail()-1 << " tours." << std::endl;
-            return 4;
-        }
-        else if(this->getIsBought()==true && this->getOwner()!=player.getName()){
-            std::cout << "Vous êtes sur la case " << this->getBoxName() << " qui appartient à " << this->getOwner() << std::endl;
-            std::cout << "Vous payez donc " << this->getRent() << " M" << std::endl;
-            player.setMoney(player.getMoney()-this->getRent());
-            return 1;
-        }
-        else
-        {
-            std::cout << "Vous ne pouvez pas acheter le terrain "<< std::endl;
-            return 1;
         }
         return 1;
     }
@@ -189,7 +117,6 @@ public:
         std::cout << "Vous avez upgradé le terrain " << this->getBoxName() << std::endl;
     }
 };
-
 
 class FrenchStadiums : public Box
 {
@@ -382,7 +309,7 @@ public:
     RedCardBox()
     {
         setBoxName("Red Card Box");
-        setBoxNumber(99);
+        setBoxNumber(10);
         setBoxType(RedCardBoxType);
     }
     ~RedCardBox(){};
@@ -435,6 +362,8 @@ class TaxBoxes : public TaxBox
 public:
     // constructors
     TaxBoxes();
+
+    void addTaxMoney(Board &board) { board.addTaxMoney(200); }
 
     // getters
     std::vector<TaxBox> getTaxBoxes() const { return _taxBoxes; }

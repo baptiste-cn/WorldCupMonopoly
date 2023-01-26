@@ -14,7 +14,6 @@ class Board{
         std::map<int, Box> _boxesMap;
         int _whosPlaying;  //à qui le tour
         int _taxMoney;  //argent des taxes
-        std::string _Message;  //message à afficher
         std::vector<Player> _players;  //joueurs
 
     public:
@@ -39,7 +38,6 @@ class Board{
         int getNbPlayers() const {return nbPlayers;}
         int getWhosPlaying() const {return _whosPlaying;}
         int getTaxMoney() const {return _taxMoney;}
-        std::string getMessage() const {return _Message;}
         std::vector<Box> getBoxes() const {return _boxes;}
         std::vector<Player>& getPlayers() {return _players;} //pas de const car on modifie le vecteur
         std::map<int, Box>& getBoxesMap()  {return _boxesMap;}
@@ -47,7 +45,6 @@ class Board{
         //setters
         void setNbPlayers(int nbPlayers){nbPlayers = nbPlayers;}
         void setWhosPlaying(int whosPlaying){_whosPlaying = whosPlaying;}
-        void setMessage(std::string message){_Message = message;}
         
 
         //others
