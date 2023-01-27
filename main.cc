@@ -293,6 +293,10 @@ void manageRedraw()
             x = 159;
             y = 880;
             break;
+        case 99:
+            x = 88;
+            y = 88;
+            break;
         }
         switch (cntplayer)
         {
@@ -330,9 +334,11 @@ void manageRedraw()
     if (affichage_interactions == 3)
         SDL_RenderCopy(renderer, texture_acheterstands, NULL, NULL);
     if (affichage_interactions == 4){
-        SDL_RenderCopy(renderer, texture_acheterstands, NULL, NULL);
+        SDL_RenderCopy(renderer, texture_passerlamain, NULL, NULL);
         SDL_RenderCopy(renderer, texture_gray, NULL, NULL);
-        myRenderText((board->getMessage()).c_str(), 233, 457);
+        myRenderText((board->getMessage()).c_str(), 225, 450);
+        myRenderText((board->getMessage2()).c_str(), 225, 490);
+        myRenderText((board->getMessage3()).c_str(), 225, 530);
     }
     // Affiche les textes
     myRenderText((std::to_string(board->getPlayers()[board->getWhosPlaying()].getMoney())+" M").c_str(), 1198, 163);
@@ -363,7 +369,7 @@ void manageRedraw()
             myRenderText2("Price for Upgrades:", 1010, 880);
             // attributes values:
             myRenderText((std::to_string(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getPrice()) + " M").c_str(), 1120, 820);
-            myRenderText((std::to_string(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getRent()) + " M").c_str(), 1110, 850);
+            myRenderText((std::to_string((board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getRent())*(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getNbUpgrades()*7+1)) + " M").c_str(), 1110, 850);
             myRenderText((std::to_string(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getPriceUpgrade()) + " M").c_str(), 1360, 880);
         }
     }
@@ -372,14 +378,17 @@ void manageRedraw()
         myRenderText("Start: Recevez 200 M lorsque", 1010, 780);
         myRenderText("vous passez par cette case", 1010, 810);
     }
-    if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == PenaltyBoxType)
+    if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == PenaltyBoxType && board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxId() == 30)
+    {
+        myRenderText("Simple Visite", 1010, 780); // Indiquer le nombre de cartons jaunes
+    }
+    if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == PenaltyBoxType && board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxId() == 99)
     {
         myRenderText("TUUUT Carton rouge", 1010, 780); // Indiquer le nombre de cartons jaunes
     }
     if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == RedCardBoxType)
     {
-        myRenderText("Carton Rouge pour une ", 1010, 780); // ajouter le nb de tours
-        myRenderText("durée de x tour", 1010, 810);        // ajouter le nb de tours
+        myRenderText("Carton Rouge", 1010, 780); // ajouter le nb de tours
     }
     if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == FreeParkBox)
     {
@@ -388,7 +397,7 @@ void manageRedraw()
     }
     if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == LotteryBoxType)
     {
-        myRenderText("Lotterie: Evenement X ", 1010, 780); // ajouter l'evenement
+        myRenderText("Lotterie", 1010, 780); // ajouter l'evenement
     }
     if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == TaxBoxType)
     {
@@ -507,7 +516,9 @@ int main()
                             board->getPlayers()[board->getWhosPlaying()].setDaysInJail(board->getPlayers()[board->getWhosPlaying()].getDaysInJail()-1);
                             if(board->getPlayers()[board->getWhosPlaying()].getDaysInJail() == 0){
                                 board->getPlayers()[board->getWhosPlaying()].setIsJailed(false);
+                                board->getPlayers()[board->getWhosPlaying()].setActualPosition(10);
                             }
+                            affichage_interactions = board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].interaction(board->getPlayers()[board->getWhosPlaying()],*board);
                         }
                         else{
                         board->throwDices(board->getPlayers()[board->getWhosPlaying()]);
@@ -559,3 +570,16 @@ int main()
     SDL_Quit();
     return 0;
 }
+
+
+
+/*
+Affichage des cases water et electrecity
+Afficahge différents des cases vidéo et pauement
+Afficher les propriétés d'un joueur de la couleur du joueur
+Afficher les dés
+
+Modifier box.hh et Box.cc pour faire payer et mettre le prix proportionel au nb de cases vidéos
+
+
+*/

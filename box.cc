@@ -30,11 +30,15 @@ SouthAfricanStadiums::SouthAfricanStadiums(){
     _southAfricanStadiums[0].setBoxType(PropertyBox);
     _southAfricanStadiums[0].setIsBought(false);
     _southAfricanStadiums[0].setPrice(60);
+    _southAfricanStadiums[0].setRent(2);
+    _southAfricanStadiums[0].setPriceUpgrade(30);
 
     _southAfricanStadiums[1].setBoxNumber(3);
     _southAfricanStadiums[1].setBoxType(PropertyBox);
     _southAfricanStadiums[1].setIsBought(false);
     _southAfricanStadiums[1].setPrice(60);
+    _southAfricanStadiums[1].setRent(4);
+    _southAfricanStadiums[1].setPriceUpgrade(30);
 }
 
 RussianStadiums::RussianStadiums(){
@@ -46,16 +50,22 @@ RussianStadiums::RussianStadiums(){
     _russianStadiums[0].setBoxType(PropertyBox);
     _russianStadiums[0].setIsBought(false);
     _russianStadiums[0].setPrice(100);
+    _russianStadiums[0].setRent(6);
+    _russianStadiums[0].setPriceUpgrade(50);
 
     _russianStadiums[1].setBoxNumber(8);
     _russianStadiums[1].setBoxType(PropertyBox);
     _russianStadiums[1].setIsBought(false);
     _russianStadiums[1].setPrice(100);
+    _russianStadiums[1].setRent(6);
+    _russianStadiums[1].setPriceUpgrade(50);
 
     _russianStadiums[2].setBoxNumber(9);
     _russianStadiums[2].setBoxType(PropertyBox);
     _russianStadiums[2].setIsBought(false);
     _russianStadiums[2].setPrice(120);
+    _russianStadiums[2].setRent(8);
+    _russianStadiums[2].setPriceUpgrade(60);
 }
 
 ArgentinianStadiums::ArgentinianStadiums(){
@@ -67,16 +77,22 @@ ArgentinianStadiums::ArgentinianStadiums(){
     _argentinianStadiums[0].setBoxType(PropertyBox);
     _argentinianStadiums[0].setIsBought(false);
     _argentinianStadiums[0].setPrice(140);
+    _argentinianStadiums[0].setRent(10);
+    _argentinianStadiums[0].setPriceUpgrade(70);
 
     _argentinianStadiums[1].setBoxNumber(13);
     _argentinianStadiums[1].setBoxType(PropertyBox);
     _argentinianStadiums[1].setIsBought(false);
     _argentinianStadiums[1].setPrice(150);
+    _argentinianStadiums[1].setRent(10);
+    _argentinianStadiums[1].setPriceUpgrade(70);
 
     _argentinianStadiums[2].setBoxNumber(14);
     _argentinianStadiums[2].setBoxType(PropertyBox);
     _argentinianStadiums[2].setIsBought(false);
     _argentinianStadiums[2].setPrice(160);
+    _argentinianStadiums[2].setRent(12);
+    _argentinianStadiums[2].setPriceUpgrade(80);
 }
 
 DeutchStadiums::DeutchStadiums(){
@@ -88,16 +104,22 @@ DeutchStadiums::DeutchStadiums(){
     _deutchStadiums[0].setBoxType(PropertyBox);
     _deutchStadiums[0].setIsBought(false);
     _deutchStadiums[0].setPrice(180);
+    _deutchStadiums[0].setRent(14);
+    _deutchStadiums[0].setPriceUpgrade(90);
 
     _deutchStadiums[1].setBoxNumber(18);
     _deutchStadiums[1].setBoxType(PropertyBox);
     _deutchStadiums[1].setIsBought(false);
     _deutchStadiums[1].setPrice(180);
+    _deutchStadiums[1].setRent(14);
+    _deutchStadiums[1].setPriceUpgrade(90);
 
     _deutchStadiums[2].setBoxNumber(19);
     _deutchStadiums[2].setBoxType(PropertyBox);
     _deutchStadiums[2].setIsBought(false);
     _deutchStadiums[2].setPrice(200);
+    _deutchStadiums[2].setRent(16);
+    _deutchStadiums[2].setPriceUpgrade(90);
 }
 
 EnglishStadiums::EnglishStadiums(){
@@ -109,16 +131,22 @@ EnglishStadiums::EnglishStadiums(){
     _englishStadiums[0].setBoxType(PropertyBox);
     _englishStadiums[0].setIsBought(false);
     _englishStadiums[0].setPrice(220);
+    _englishStadiums[0].setRent(18);
+    _englishStadiums[0].setPriceUpgrade(110);
 
     _englishStadiums[1].setBoxNumber(23);
     _englishStadiums[1].setBoxType(PropertyBox);
     _englishStadiums[1].setIsBought(false);
     _englishStadiums[1].setPrice(220);
+    _englishStadiums[1].setRent(18);
+    _englishStadiums[1].setPriceUpgrade(110);
 
     _englishStadiums[2].setBoxNumber(24);
     _englishStadiums[2].setBoxType(PropertyBox);
     _englishStadiums[2].setIsBought(false);
     _englishStadiums[2].setPrice(240);
+    _englishStadiums[2].setRent(20);
+    _englishStadiums[2].setPriceUpgrade(110);
 }
 
 BrazilianStadiums::BrazilianStadiums(){
@@ -130,16 +158,22 @@ BrazilianStadiums::BrazilianStadiums(){
     _brazilianStadiums[0].setBoxType(PropertyBox);
     _brazilianStadiums[0].setIsBought(false);
     _brazilianStadiums[0].setPrice(260);
+    _brazilianStadiums[0].setRent(22);
+    _brazilianStadiums[0].setPriceUpgrade(130);
 
     _brazilianStadiums[1].setBoxNumber(27);
     _brazilianStadiums[1].setBoxType(PropertyBox);
     _brazilianStadiums[1].setIsBought(false);
     _brazilianStadiums[1].setPrice(260);
+    _brazilianStadiums[1].setRent(22);
+    _brazilianStadiums[1].setPriceUpgrade(130);
 
     _brazilianStadiums[2].setBoxNumber(29);
     _brazilianStadiums[2].setBoxType(PropertyBox);
     _brazilianStadiums[2].setIsBought(false);
     _brazilianStadiums[2].setPrice(280);
+    _brazilianStadiums[2].setRent(22);
+    _brazilianStadiums[2].setPriceUpgrade(130);
 }
 
 SpanishStadiums::SpanishStadiums(){
@@ -151,16 +185,22 @@ SpanishStadiums::SpanishStadiums(){
     _spanishStadiums[0].setBoxType(PropertyBox);
     _spanishStadiums[0].setIsBought(false);
     _spanishStadiums[0].setPrice(300);
+    _spanishStadiums[0].setRent(26);
+    _spanishStadiums[0].setPriceUpgrade(150);
 
     _spanishStadiums[1].setBoxNumber(32);
     _spanishStadiums[1].setBoxType(PropertyBox);
     _spanishStadiums[1].setIsBought(false);
     _spanishStadiums[1].setPrice(300);
+    _spanishStadiums[1].setRent(26);
+    _spanishStadiums[1].setPriceUpgrade(150);
 
     _spanishStadiums[2].setBoxNumber(34);
     _spanishStadiums[2].setBoxType(PropertyBox);
     _spanishStadiums[2].setIsBought(false);
     _spanishStadiums[2].setPrice(320);
+    _spanishStadiums[2].setRent(28);
+    _spanishStadiums[2].setPriceUpgrade(150);
 }
 
 FrenchStadiums::FrenchStadiums(){
@@ -171,11 +211,15 @@ FrenchStadiums::FrenchStadiums(){
     _frenchStadiums[0].setBoxType(PropertyBox);
     _frenchStadiums[0].setIsBought(false);
     _frenchStadiums[0].setPrice(350);
+    _frenchStadiums[0].setRent(35);
+    _frenchStadiums[0].setPriceUpgrade(175);
 
     _frenchStadiums[1].setBoxNumber(39);
     _frenchStadiums[1].setBoxType(PropertyBox);
     _frenchStadiums[1].setIsBought(false);
     _frenchStadiums[1].setPrice(400);
+    _frenchStadiums[1].setRent(50);
+    _frenchStadiums[1].setPriceUpgrade(175);
 }
 
 VideoBoxes::VideoBoxes(){
@@ -256,10 +300,14 @@ RepairBoxes::RepairBoxes(){
     _repairBoxes.push_back(RepairBox("Water Box"));
 
     _repairBoxes[0].setBoxNumber(12);
-    _repairBoxes[0].setBoxType(PropertyBox);
+    _repairBoxes[0].setBoxType(RepairBoxType);
     _repairBoxes[0].setIsBought(false);
+    _repairBoxes[0].setPrice(150);
+    _repairBoxes[0].setRent(4);
 
     _repairBoxes[1].setBoxNumber(28);
-    _repairBoxes[1].setBoxType(PropertyBox);
-    _repairBoxes[0].setIsBought(false);
+    _repairBoxes[1].setBoxType(RepairBoxType);
+    _repairBoxes[1].setIsBought(false);
+    _repairBoxes[1].setPrice(150);
+    _repairBoxes[1].setRent(10);
 }

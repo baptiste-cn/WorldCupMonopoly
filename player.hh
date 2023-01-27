@@ -19,6 +19,7 @@ class Player: public Board{
         void setActualPosition(int position){_actualPosition = position;}
         void setDaysInJail(int days){_daysInJail = days;}
         void setIsJailed(bool isJailed){_isJailed = isJailed;}
+        void setBankrupt(bool isBankrupt){_isBankrupt = isBankrupt; std::cout << "Vous en banqueroute, vous avez perdu !" << std::endl;}
 
         //getters
         int getMoney() const {return _money;}
