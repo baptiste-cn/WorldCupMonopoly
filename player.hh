@@ -28,6 +28,7 @@ class Player: public Board{
         std::vector <Box*> getOwnedBoxes() const {return _ownedBoxes;}
         int getDaysInJail() {return _daysInJail;}
         bool getIsJailed() {return _isJailed;}
+        bool getIsBankrupt() {return _isBankrupt;}
 
         //others
         std::string _name;

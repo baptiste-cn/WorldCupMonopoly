@@ -232,21 +232,25 @@ VideoBoxes::VideoBoxes(){
     _videoBoxes[0].setBoxType(PropertyBox);
     _videoBoxes[0].setIsBought(false);
     _videoBoxes[0].setPrice(200);
+    _videoBoxes[0].setRent(25);
 
     _videoBoxes[1].setBoxNumber(15);
     _videoBoxes[1].setBoxType(PropertyBox);
     _videoBoxes[1].setIsBought(false);
     _videoBoxes[1].setPrice(200);
+    _videoBoxes[1].setRent(25);
 
     _videoBoxes[2].setBoxNumber(25);
     _videoBoxes[2].setBoxType(PropertyBox);
     _videoBoxes[2].setIsBought(false);
     _videoBoxes[2].setPrice(200);
+    _videoBoxes[2].setRent(25);
 
     _videoBoxes[3].setBoxNumber(35);
     _videoBoxes[3].setBoxType(PropertyBox);
     _videoBoxes[3].setIsBought(false);
     _videoBoxes[3].setPrice(200);
+    _videoBoxes[3].setRent(25);
 };
 
 TaxBoxes::TaxBoxes(){

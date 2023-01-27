@@ -34,7 +34,7 @@ protected:
     double _mortgagePrice; // prix hypothèque
     bool _isBought;
     int _rent;
-    int _nbUpgrades = 0; //0 : pas de stand, 1 : 1 stand, 2 : 2 stands, 3 : 3 stands, 4 : 4 stands, 5 : 1 hotel
+    int _nbUpgrades = 0; // 0 : pas de stand, 1 : 1 stand, 2 : 2 stands, 3 : 3 stands, 4 : 4 stands, 5 : 1 hotel
 
 public:
     // constructors
@@ -53,7 +53,7 @@ public:
     int getRent() const { return _rent; }
     int getPriceUpgrade() const { return _priceupgrade; }
     std::string getOwner() const { return _owner; }
-    int getNbUpgrades() {return _nbUpgrades;}
+    int getNbUpgrades() { return _nbUpgrades; }
 
     // setters
     void setBoxNumber(int boxNumber) { _boxNumber = boxNumber; }
@@ -65,10 +65,51 @@ public:
     void setIsBought(bool bought) { _isBought = bought; }
     void setRent(int rent) { _rent = rent; }
     void setPriceUpgrade(int priceupgrade) { _priceupgrade = priceupgrade; }
-    void setOwner(std::string owner) { std::cout << "Owner mis à jour" << std::endl; _owner = owner; }
-    void setNbUpgrades(int nbUpgrades) {_nbUpgrades = nbUpgrades;}
+    void setOwner(std::string owner)
+    {
+        std::cout << "Owner mis à jour" << std::endl;
+        _owner = owner;
+    }
+    void setNbUpgrades(int nbUpgrades) { _nbUpgrades = nbUpgrades; }
 
     void addTaxMoney(Board &board) { board.addTaxMoney(200); }
+
+    void ArgentNegatif(Player &player, Board &board)
+    {
+        // Argent négatif
+        int i = player.getOwnedBoxes().size() - 1;
+        if (player.getMoney() < 0)
+        { // si le joueur n'a plus d'argent
+            std::cout << "Plus d'argent" << std::endl;
+            while (player.getMoney() < 0)
+            {
+                if (i == -1)
+                { // si le joueur ne peut plus rien vendre et ne peut toujours pas payer
+                    player.setBankrupt(true);
+                }
+                else
+                {
+                    std::cout << "ArgentNegatif: " << player.getMoney() << std::endl;
+                    if (player.getOwnedBoxes()[i]->getNbUpgrades() > 0) // si oui, on regarde s'il possède des upgrades
+                    {
+                        player.getOwnedBoxes()[i]->setNbUpgrades(player.getOwnedBoxes()[i]->getNbUpgrades() - 1);
+                        player.setMoney(player.getMoney() + (player.getOwnedBoxes()[i]->getPriceUpgrade()) / 2); // on lui revend (à moitié prix) ensuite toutes ses upgrades jusqu'à ce qu'il puisse payer
+                    }
+                    else
+                    {
+                        player.getOwnedBoxes()[i]->setIsBought(false); // on lui revend (à moitié prix) ensuite toutes ses propriétés jusqu'à ce qu'il puisse payer
+                        player.setMoney(player.getMoney() + (player.getOwnedBoxes()[i]->getPrice() / 2));
+                        player.getOwnedBoxes()[i]->setOwner("none");
+                        player.getOwnedBoxes()[i]->setNbUpgrades(0);
+                        player.getOwnedBoxes().pop_back();
+                        i--;
+                    }
+                }
+                if (player.getIsBankrupt() == true)
+                    break;
+            }
+        }
+    }
 
     int interaction(Player &player, Board &board)
     {
@@ -96,15 +137,33 @@ public:
             std::cout << "Vous pouvez acheter le terrain " << this->getBoxName() << " pour " << this->getPrice() << " M" << std::endl;
             return 2;
         }
-        else if (this->getIsBought() == true && this->getOwner() != player.getName() && this->getBoxType() == PropertyBox) //Payer un stade
-        { // Payer l'autre joueur pour un stade
-        
-            board.setMessage("Vous etes sur la case");
-            board.setMessage2("de "+this->getOwner());
-            board.setMessage3("Vous payez donc " + std::to_string(this->getRent()*(this->getNbUpgrades()*7+1)) + " M");
-            std::cout << "Vous êtes sur la case " << this->getBoxName() << " qui appartient à " << this->getOwner() << std::endl;
-            std::cout << "Vous payez donc " << this->getRent()*(this->getNbUpgrades()*7+1) << " M" << std::endl;
-            player.setMoney(player.getMoney() - this->getRent()*(this->getNbUpgrades()*7+1));
+        else if (this->getIsBought() == true && this->getOwner() != player.getName() && this->getBoxType() == PropertyBox) // Payer un stade
+        {                                                                                                                  // Payer l'autre joueur pour un stade
+            if (this->getBoxId() == 5 || this->getBoxId() == 15 || this->getBoxId() == 25 || this->getBoxId() == 35)
+            {
+                /*GERER ICI LE NOMBRE PROPORTIONNEL =================================================================================================================================
+                 =================================================================================================================================
+                  =================================================================================================================================
+                   =================================================================================================================================
+                */
+            }
+            else
+            {
+                board.setMessage("Vous etes sur la case");
+                board.setMessage2("de " + this->getOwner());
+                board.setMessage3("Vous payez donc " + std::to_string(this->getRent() * (this->getNbUpgrades() * 7 + 1)) + " M");
+                std::cout << "Vous êtes sur la case " << this->getBoxName() << " qui appartient à " << this->getOwner() << std::endl;
+                std::cout << "Vous payez donc " << this->getRent() * (this->getNbUpgrades() * 7 + 1) << " M" << std::endl;
+                player.setMoney(player.getMoney() - this->getRent() * (this->getNbUpgrades() * 7 + 1));
+                for (long unsigned int i = 0; i < board.getPlayers().size(); i++)
+                {
+                    if (board.getPlayers()[i].getName() == this->getOwner())
+                    {
+                        board.getPlayers()[i].setMoney(board.getPlayers()[i].getMoney() + this->getRent() * (this->getNbUpgrades() * 7 + 1));
+                    }
+                }
+            }
+            ArgentNegatif(player, board);
             return 4;
         }
         else if (player.getMoney() >= this->getPrice() && this->getIsBought() == false && this->getBoxType() == RepairBoxType) // Acheter la case water ou electricity
@@ -114,13 +173,21 @@ public:
         }
         else if (this->getIsBought() == true && this->getBoxType() == RepairBoxType && this->getOwner() != player.getName()) // Payer la case water ou electricity à l'autre joueur
         {
-            
+
             board.setMessage("Vous etes sur la case");
-            board.setMessage2("de "+this->getOwner());
-            board.setMessage3("Vous payez donc " + std::to_string(this->getRent() * (board.dice1 + board.dice2) ) + " M");
+            board.setMessage2("de " + this->getOwner());
+            board.setMessage3("Vous payez donc " + std::to_string(this->getRent() * (board.dice1 + board.dice2)) + " M");
             std::cout << "Vous êtes sur la case " << this->getBoxName() << " qui appartient à " << this->getOwner() << std::endl;
             std::cout << "Vous payez donc " << this->getRent() * (board.dice1 + board.dice2) << " M" << std::endl;
             player.setMoney(player.getMoney() - (this->getRent() * (board.dice1 + board.dice2)));
+            for (long unsigned int i = 0; i < board.getPlayers().size(); i++)
+            {
+                if (board.getPlayers()[i].getName() == this->getOwner())
+                {
+                    board.getPlayers()[i].setMoney(board.getPlayers()[i].getMoney() + (this->getRent() * (board.dice1 + board.dice2)));
+                }
+            }
+            ArgentNegatif(player, board);
             return 4;
         }
         else if (this->getBoxType() == StartBoxType)
@@ -148,6 +215,7 @@ public:
             std::cout << "Vous êtes sur la case taxe, vous perdez 100 M" << std::endl;
             player.setMoney(player.getMoney() - 100);
             board.addTaxMoney(100);
+            ArgentNegatif(player, board);
             return 1;
         }
         else if (this->getBoxType() == LotteryBoxType)
@@ -197,11 +265,12 @@ public:
                 std::cout << "Quelle faute lamentable ! Vous étiez sur le point de marquer... Direction la case départ pour vous rétablir" << std::endl;
                 player.setActualPosition(0);
             }
+            ArgentNegatif(player, board);
             return 4;
         }
         else if (this->getBoxType() == PenaltyBoxType)
         {
-            
+
             board.setMessage("Vous avez recu");
             board.setMessage2("un Carton rouge !");
             board.setMessage3(" ");
@@ -223,30 +292,6 @@ public:
         {
             std::cout << "Vous ne pouvez pas acheter le terrain " << std::endl;
             return 1;
-        }
-
-        // Argent négatif
-        int i = player.getOwnedBoxes().size();
-
-        if (i)
-        { // on regarde si le joueur possède des propriétés
-            std::cout << "Plus d'argent" << std::endl;
-            while (player.getMoney() < 0)
-            {
-                if (player.getOwnedBoxes()[i]->getNbUpgrades()) // si oui, on regarde s'il possède des upgrades
-                {
-                    player.getOwnedBoxes()[i]->setNbUpgrades(player.getOwnedBoxes()[i]->getNbUpgrades() - 1);
-                    player.setMoney(player.getMoney() + (player.getOwnedBoxes()[i]->getPriceUpgrade()) / 2); // on lui revend (à moitié prix) ensuite toutes ses upgrades jusqu'à ce qu'il puisse payer
-                }
-
-                player.getOwnedBoxes()[i]->setIsBought(false); // on lui revend (à moitié prix) ensuite toutes ses propriétés jusqu'à ce qu'il puisse payer
-                player.setMoney(player.getMoney() + (player.getOwnedBoxes()[i]->getPrice() / 2));
-
-                if (!i)
-                { // si le joueur ne peut plus rien vendre et ne peut toujours pas payer
-                    player.setBankrupt(true);
-                }
-            }
         }
 
         return 1;

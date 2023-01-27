@@ -26,6 +26,22 @@ int mx, my;
 char sendBuffer[256];
 SDL_Surface *monopolyboard;
 SDL_Texture *texture_monopolyboard;
+SDL_Surface *hotel;
+SDL_Texture *texture_hotel;
+SDL_Surface *maison;
+SDL_Texture *texture_maison;
+SDL_Surface *de1;
+SDL_Texture *texture_de1;
+SDL_Surface *de2;
+SDL_Texture *texture_de2;
+SDL_Surface *de3;
+SDL_Texture *texture_de3;
+SDL_Surface *de4;
+SDL_Texture *texture_de4;
+SDL_Surface *de5;
+SDL_Texture *texture_de5;
+SDL_Surface *de6;
+SDL_Texture *texture_de6;
 SDL_Surface *p1;
 SDL_Texture *texture_p1;
 SDL_Surface *p2;
@@ -47,10 +63,13 @@ char word[40];
 int cptWord;
 SDL_Window *window;
 SDL_Renderer *renderer;
+SDL_Rect De1 = {365, 200, 128, 128};
+SDL_Rect De2 = {520, 200, 128, 128};
 SDL_Rect PosP1 = {960, 30, 64, 64};
 SDL_Rect PosP2 = {250, 300, 64, 64};
 SDL_Rect PosP3 = {960, 30, 64, 64};
 SDL_Rect PosP4 = {250, 300, 64, 64};
+SDL_Rect Posup = {250, 300, 32, 32};
 int affichage_interactions = 0; // 0 = lancer les dés | 1=passeer la main | 2=acheterlapropriété et passer la main | 3 = upgrade et passer la main
 
 void init_sdl()
@@ -63,6 +82,23 @@ void init_sdl()
     renderer = SDL_CreateRenderer(window, -1, 0);
     monopolyboard = IMG_Load("boardmonopoly.png");
     texture_monopolyboard = SDL_CreateTextureFromSurface(renderer, monopolyboard);
+    hotel = IMG_Load("hotel.png");
+    texture_hotel = SDL_CreateTextureFromSurface(renderer, hotel);
+    maison = IMG_Load("maison.png");
+    texture_maison = SDL_CreateTextureFromSurface(renderer, maison);
+    de1 = IMG_Load("de1.png");
+    texture_de1 = SDL_CreateTextureFromSurface(renderer, de1);
+    de2 = IMG_Load("de2.png");
+    texture_de2 = SDL_CreateTextureFromSurface(renderer, de2);
+    de3 = IMG_Load("de3.png");
+    texture_de3 = SDL_CreateTextureFromSurface(renderer, de3);
+    de4 = IMG_Load("de4.png");
+    texture_de4 = SDL_CreateTextureFromSurface(renderer, de4);
+    de5 = IMG_Load("de5.png");
+    texture_de5 = SDL_CreateTextureFromSurface(renderer, de5);
+    de6 = IMG_Load("de6.png");
+    texture_de6 = SDL_CreateTextureFromSurface(renderer, de6);
+    //Players
     p1 = IMG_Load("p1.png");
     texture_p1 = SDL_CreateTextureFromSurface(renderer, p1);
     p2 = IMG_Load("p2.png");
@@ -316,6 +352,210 @@ void manageRedraw()
     }
     // Affiche les textures
     SDL_RenderCopy(renderer, texture_monopolyboard, NULL, NULL);
+    
+    for (int i = 0; i < 40; i++)
+    {
+        int up = board->getBoxesMap()[i].getNbUpgrades();
+        int nb = board->getBoxesMap()[i].getBoxNumber();
+        int x = 0;
+        int y = 0;
+        switch (nb)
+        {
+        case 0:
+            x = -50;
+            y = -50;
+            break;
+        case 1:
+            x = 50;
+            y = 780;
+            break;
+        case 2:
+            x = -50;
+            y = -50;
+            break;
+        case 3:
+            x = 50;
+            y = 625;
+            break;
+        case 4:
+            x = -50;
+            y = -50;
+            break;
+        case 5:
+            x = -50;
+            y = -50;
+            break;
+        case 6:
+            x = 50;
+            y = 390;
+            break;
+        case 7:
+            x = -50;
+            y = -50;
+            break;
+        case 8:
+            x = 50;
+            y = 235;
+            break;
+        case 9:
+            x = 50;
+            y = 160;
+            break;
+        case 10: // Case prison visite
+            x = -50;
+            y = -50;
+            break;
+        case 11:
+            x = 160;
+            y = 50;
+            break;
+        case 12:
+            x = -50;
+            y = -50;
+            break;
+        case 13:
+            x = 315;
+            y = 50;
+            break;
+        case 14:
+            x = 390;
+            y = 50;
+            break;
+        case 15:
+            x = -50;
+            y = -50;
+            break;
+        case 16:
+            x = 545;
+            y = 50;
+            break;
+        case 17:
+            x = -50;
+            y = -50;
+            break;
+        case 18:
+            x = 704;
+            y = 50;
+            break;
+        case 19:
+            x = 779;
+            y = 50;
+            break;
+        case 20: // Terrain Libre
+            x = -50;
+            y = -50;
+            break;
+        case 21:
+            x = 885;
+            y = 159;
+            break;
+        case 22:
+            x = -50;
+            y = -50;
+            break;
+        case 23:
+            x = 885;
+            y = 313;
+            break;
+        case 24:
+            x = 885;
+            y = 390;
+            break;
+        case 25:
+            x = -50;
+            y = -50;
+            break;
+        case 26:
+            x = 885;
+            y = 546;
+            break;
+        case 27:
+            x = 885;
+            y = 625;
+            break;
+        case 28:
+            x = -50;
+            y = -50;
+            break;
+        case 29:
+            x = 885;
+            y = 778;
+            break;
+        case 30: // Carton jaune
+            x = -50;
+            y = -50;
+            break;
+        case 31:
+            x = 779;
+            y = 880;
+            break;
+        case 32:
+            x = 704;
+            y = 880;
+            break;
+        case 33:
+            x = -50;
+            y = -50;
+            break;
+        case 34:
+            x = 547;
+            y = 880;
+            break;
+        case 35:
+            x = -50;
+            y = -50;
+            break;
+        case 36:
+            x = -50;
+            y = -50;
+            break;
+        case 37:
+            x = 314;
+            y = 880;
+            break;
+        case 38:
+            x = -50;
+            y = -50;
+            break;
+        case 39:
+            x = 159;
+            y = 880;
+            break;
+        case 99:
+            x = 88;
+            y = 88;
+            break;
+        }
+        switch (up)
+        {
+        case 0:
+            break;
+        case 1:
+            Posup = {x, y, 64, 64};
+            SDL_RenderCopy(renderer, texture_maison, NULL, &Posup);
+            myRenderText("1", x + 20, y + 20);
+            break;
+        case 2:
+            Posup = {x, y, 64, 64};
+            SDL_RenderCopy(renderer, texture_maison, NULL, &Posup);
+            myRenderText("2", x + 20, y + 20);
+            break;
+        case 3:
+            Posup = {x, y, 64, 64};
+            SDL_RenderCopy(renderer, texture_maison, NULL, &Posup);
+            myRenderText("3", x + 20, y + 20);
+            break;
+        case 4:
+            Posup = {x, y, 64, 64};
+            SDL_RenderCopy(renderer, texture_maison, NULL, &Posup);
+            myRenderText("4", x + 20, y + 20);
+            break;
+        case 5:
+            Posup = {x, y, 64, 64};
+            SDL_RenderCopy(renderer, texture_hotel, NULL, &Posup);
+            break;
+        }
+    }
     SDL_RenderCopy(renderer, texture_p1, NULL, &PosP1);
     SDL_RenderCopy(renderer, texture_p2, NULL, &PosP2);
     if (board->nbPlayers > 2)
@@ -356,9 +596,19 @@ void manageRedraw()
     // Render Properties infos
     if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == PropertyBox)
     {
-        int id = board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxId();
+        int id = board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxNumber();
         if (id == 5 || id == 15 || id == 25 || id == 35)
         {
+            myRenderText(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxName().c_str(), 1010, 790);
+            // Attrubutes names:
+            myRenderText2("Price:", 1010, 820);
+            myRenderText2("Rent:", 1010, 850);
+            myRenderText2("Info:", 1010, 880);
+            // attributes values:
+            myRenderText((std::to_string(board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getPrice()) + " M").c_str(), 1120, 820);
+            myRenderText("Waiting for info", 1120, 850);
+            myRenderText("Le loyer depend du nombre", 1120, 880);
+            myRenderText("de videos acquises.", 1010, 930);
         }
         else
         {
@@ -407,8 +657,60 @@ void manageRedraw()
     {
         myRenderText("Simple Visite", 1010, 780); // ajouter l'argent retiré
     }
+    if (board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxType() == RepairBoxType)
+    {
+        myRenderText("Case entretien:", 1010, 780);
+        myRenderText("Le loyer a payer correspond", 1010, 850);
+        myRenderText("a 4 ou 10 fois", 1010, 880);
+        myRenderText("la valeur des des.", 1010, 930);
+    }
+    //de
+    if(affichage_interactions>0){
+        switch(board->dice1){
+            case 1:
+                SDL_RenderCopy(renderer, texture_de1, NULL, &De1);
+                break;
+            case 2:
+                SDL_RenderCopy(renderer, texture_de2, NULL, &De1);
+                break;
+            case 3:
+                SDL_RenderCopy(renderer, texture_de3, NULL, &De1);
+                break;
+            case 4:
+                SDL_RenderCopy(renderer, texture_de4, NULL, &De1);
+                break;
+            case 5:
+                SDL_RenderCopy(renderer, texture_de5, NULL, &De1);
+                break;
+            case 6:
+                SDL_RenderCopy(renderer, texture_de6, NULL, &De1);
+                break;
+        }
+        
+        switch(board->dice2){
+            case 1:
+                SDL_RenderCopy(renderer, texture_de1, NULL, &De2);
+                break;
+            case 2:
+                SDL_RenderCopy(renderer, texture_de2, NULL, &De2);
+                break;
+            case 3:
+                SDL_RenderCopy(renderer, texture_de3, NULL, &De2);
+                break;
+            case 4:
+                SDL_RenderCopy(renderer, texture_de4, NULL, &De2);
+                break;
+            case 5:
+                SDL_RenderCopy(renderer, texture_de5, NULL, &De2);
+                break;
+            case 6:
+                SDL_RenderCopy(renderer, texture_de6, NULL, &De2);
+                break;
+            
+        }
+    }
+
     // Show what was drawn
-    std::cout << "Render" << std::endl;
     SDL_RenderPresent(renderer);
 }
 
@@ -420,13 +722,7 @@ int main()
     std::cout << "How many players are there? (2-4)" << std::endl;
     std::cin >> board->nbPlayers;
 
-    while (board->nbPlayers < 2)
-    {
-        std::cout << "There must be at least 2 players." << std::endl;
-        std::cout << "How many players are there? (2-4)" << std::endl;
-        std::cin >> board->nbPlayers;
-    }
-    while (board->nbPlayers > 4)
+    while (board->nbPlayers < 2 || board->nbPlayers > 4)
     {
         std::cout << "There must be at least 2 players." << std::endl;
         std::cout << "How many players are there? (2-4)" << std::endl;
@@ -453,7 +749,7 @@ int main()
     std::cout << "To determine the order of play, each player will roll the dice." << std::endl;
     std::cout << "The player with the highest roll will go first." << std::endl;
     std::cout << "The player with the lowest roll will go last." << std::endl;
-    std::cout << "The other players will go in between." << std::endl;
+     << "The other players will go in between." << std::endl;
 
     std::cin.ignore();
     int dices[board->nbPlayers];
@@ -491,9 +787,10 @@ int main()
     // Initialisation de l'image
     init_sdl();
 
-    // ==================================TO REMOVE==================================
-    board->getPlayers()[0].addMoney(1500);
-    board->getPlayers()[1].addMoney(1500);
+    for (int i = 0; i < board->nbPlayers; i++)
+    {
+            board->getPlayers()[i].setMoney(1500);
+    }
     // ==============================================================================
     manageRedraw();
     while (!quit)
@@ -522,11 +819,27 @@ int main()
                         }
                         else{
                         board->throwDices(board->getPlayers()[board->getWhosPlaying()]);
-                        std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << std::endl;
+                        //std::cout << "You rolled a " << board->dice1 << " and a " << board->dice2 << std::endl;
+                        if(board->getPlayers()[board->getWhosPlaying()].getActualPosition() + board->dice1 + board->dice2>=40){
+                            board->getPlayers()[board->getWhosPlaying()].setMoney(board->getPlayers()[board->getWhosPlaying()].getMoney()+200);
+                        }
                         (board->getPlayers()[board->getWhosPlaying()]).setActualPosition(((board->getPlayers()[board->getWhosPlaying()]).getActualPosition() + board->dice1 + board->dice2) % 40); // modulo 40 afin de reset la position du joueur s'il passe un tour de plateau
-                        std::cout << "You are now on " << board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxName() << std::endl;
-                        std::cout << board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxNumber() << std::endl;
+                        //std::cout << "You are now on " << board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxName() << std::endl;
+                        //std::cout << board->getBoxesMap()[(board->getPlayers()[board->getWhosPlaying()]).getActualPosition()].getBoxNumber() << std::endl;
                         affichage_interactions = board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].interaction(board->getPlayers()[board->getWhosPlaying()],*board);
+                        }
+
+                        if(board->getPlayers()[board->getWhosPlaying()].getIsBankrupt()==true){
+                            board->getPlayers().erase(players_iterators[board->getWhosPlaying()]);
+                            players_iterators.erase(players_iterators.begin()+board->getWhosPlaying());
+                            board->nbPlayers--;
+                            if(board->getWhosPlaying() == board->nbPlayers){
+                                board->setWhosPlaying(0);
+                            }
+                        }
+                        if(board->nbPlayers==1){
+                            std::cout << "The winner is " << board->getPlayers()[0].getName() << std::endl;
+                            quit = 1;
                         }
                         std::cout << "-------------------------------------------" << std::endl;
                         manageRedraw();
@@ -538,11 +851,11 @@ int main()
                     {
                         if (affichage_interactions == 2)
                         {
-                            std::cout << board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].getBoxNumber() << std::endl;
-                            std::cout << board->getPlayers()[board->getWhosPlaying()].getActualPosition() << std::endl;
+                            //std::cout << board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].getBoxNumber() << std::endl;
+                            //std::cout << board->getPlayers()[board->getWhosPlaying()].getActualPosition() << std::endl;
                             board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()];
                             (board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()]).acheter(board->getPlayers()[board->getWhosPlaying()]);
-                            std::cout << "le proprietaire est " << board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].getOwner() << std::endl;
+                            //std::cout << "le proprietaire est " << board->getBoxesMap()[board->getPlayers()[board->getWhosPlaying()].getActualPosition()].getOwner() << std::endl;
                         }
                         else if (affichage_interactions == 3)
                         {
@@ -550,13 +863,11 @@ int main()
                         }
                         // Ajouter un delay pour confirmer achat et affichage
                         board->setWhosPlaying((board->getWhosPlaying() + 1) % board->getPlayers().size());
-                        std::cout << "Acheter/Upgrader" << std::endl;
                         affichage_interactions = 0;
                     }
                     if ((mx > 1329 && mx < 1600) && (my < 150)) // Bouton lancer les dés
                     {
                         board->setWhosPlaying((board->getWhosPlaying() + 1) % board->getPlayers().size());
-                        std::cout << "Passer la main" << std::endl;
                         affichage_interactions = 0;
                     }
                 }
@@ -574,10 +885,7 @@ int main()
 
 
 /*
-Affichage des cases water et electrecity
-Afficahge différents des cases vidéo et pauement
 Afficher les propriétés d'un joueur de la couleur du joueur
-Afficher les dés
 
 Modifier box.hh et Box.cc pour faire payer et mettre le prix proportionel au nb de cases vidéos
 
