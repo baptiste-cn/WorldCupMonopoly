@@ -70,6 +70,8 @@ public:
         std::cout << "Owner mis à jour" << std::endl;
         _owner = owner;
     }
+
+    //others
     void setNbUpgrades(int nbUpgrades) { _nbUpgrades = nbUpgrades; }
 
     void addTaxMoney(Board &board) { board.addTaxMoney(200); }
