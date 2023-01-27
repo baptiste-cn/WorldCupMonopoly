@@ -749,7 +749,7 @@ int main()
     std::cout << "To determine the order of play, each player will roll the dice." << std::endl;
     std::cout << "The player with the highest roll will go first." << std::endl;
     std::cout << "The player with the lowest roll will go last." << std::endl;
-     << "The other players will go in between." << std::endl;
+    std::cout << "The other players will go in between." << std::endl;
 
     std::cin.ignore();
     int dices[board->nbPlayers];
@@ -832,6 +832,7 @@ int main()
                         if(board->getPlayers()[board->getWhosPlaying()].getIsBankrupt()==true){
                             board->getPlayers().erase(players_iterators[board->getWhosPlaying()]);
                             players_iterators.erase(players_iterators.begin()+board->getWhosPlaying());
+                            delete &board->getPlayers()[board->getWhosPlaying()];
                             board->nbPlayers--;
                             if(board->getWhosPlaying() == board->nbPlayers){
                                 board->setWhosPlaying(0);
@@ -839,6 +840,8 @@ int main()
                         }
                         if(board->nbPlayers==1){
                             std::cout << "The winner is " << board->getPlayers()[0].getName() << std::endl;
+                            delete &board->getPlayers()[0];
+                            delete board;
                             quit = 1;
                         }
                         std::cout << "-------------------------------------------" << std::endl;

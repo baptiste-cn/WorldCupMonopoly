@@ -141,11 +141,21 @@ public:
         {                                                                                                                  // Payer l'autre joueur pour un stade
             if (this->getBoxId() == 5 || this->getBoxId() == 15 || this->getBoxId() == 25 || this->getBoxId() == 35)
             {
-                /*GERER ICI LE NOMBRE PROPORTIONNEL =================================================================================================================================
-                 =================================================================================================================================
-                  =================================================================================================================================
-                   =================================================================================================================================
-                */
+                //faire payer le joueur 25M par case vidéo achetée par le joueur adverse
+                //if(this->getOwner() == board.getBoxesMap()[5].getOwner() && this->getOwner() == board.getBoxesMap()[15].getOwner() && this->getOwner() == board.getBoxesMap()[25].getOwner() && this->getOwner() == board.getBoxesMap()[35].getOwner()){
+                    
+                //}
+                board.setMessage("Vous etes sur la case");
+                board.setMessage2("de " + this->getOwner());
+                board.setMessage3("Vous payez 25M par case video appartenant a " + this->getOwner());
+                player.setMoney(player.getMoney() - (this->getOwner() == board.getBoxesMap()[5].getOwner())*25 - (this->getOwner() == board.getBoxesMap()[15].getOwner())*25 - (this->getOwner() == board.getBoxesMap()[25].getOwner())*25 - (this->getOwner() == board.getBoxesMap()[35].getOwner())*25);
+                for (long unsigned int i = 0; i < board.getPlayers().size(); i++)
+                {
+                    if (board.getPlayers()[i].getName() == this->getOwner())
+                    {
+                        board.getPlayers()[i].setMoney(board.getPlayers()[i].getMoney() + this->getRent());
+                    }
+                }
             }
             else
             {
