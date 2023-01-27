@@ -25,7 +25,9 @@ class Board{
         int dice2;
 
         Board();
-        ~Board(){};
+        ~Board(){
+            std::cout << "Destruction de Board" << std::endl;
+        };
         void throwDices(Player &player){
             //réinitialisation du rand
             srand(time(NULL));
@@ -62,7 +64,7 @@ class Board{
 
 };
 
-//operators
+//surcharge d'opérateurs
 inline std::ostream& operator<<(std::ostream& os, const Board& board){
     os << "Nombre de joueurs: " << board.getNbPlayers() << std::endl;
     return os;
